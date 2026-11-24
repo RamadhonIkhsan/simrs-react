@@ -1,0 +1,7 @@
+<svg viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Static decorative accent lines — zero animation, zero GPU -->
+  <path d="M0,400 C0,400 100,260 160,160 C220,60 300,-20 300,-20"
+        stroke="#e8c845" stroke-width="2" opacity="0.4"/>
+  <path d="M-30,400 C-30,400 70,240 130,140 C190,40 270,-40 270,-40"
+        stroke="#5b9bd5" stroke-width="2" opacity="0.45"/>
+</svg>

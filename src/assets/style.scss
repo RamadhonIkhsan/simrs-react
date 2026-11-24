@@ -1,0 +1,53 @@
+:root {
+  --primary: #092950;
+  --success: #50cd89;
+  --info: #7239ea;
+  --warning: #FEB82F;
+  --danger: #f1416c;
+  --secondary: #aaa;
+  --dark: #181c32;
+  --dark-grey: #666;
+  --primary-light: #e6eef8;
+  --secondary-light: #f9f9f9;
+  --success-light: #e8fff3;
+  --info-light: #f8f5ff;
+  --warning-light: #fff8dd;
+  --danger-light: #fff5f8;
+  --dark-light: #e4e6e7;
+  --white: #fff;
+  --text-muted: #7e7e7e;
+  --success-inverse: #ffffff;
+  --info-inverse: #ffffff;
+  --warning-inverse: #ffffff;
+  --danger-inverse: #ffffff;
+  --dark-inverse: #ffffff;
+  --primary-inverse: #ffffff;
+  --white-inverse: #ffffff;
+  --white-light: #ffffff;
+  --grey: #a6a6a6;
+
+  --bg-menu: linear-gradient(90deg, #003775 0%, #0057b9 104.42%);
+  --bg-sub-menu: #f8f8f840;
+}
+
+$green : #50CD89;
+$darkGreen : #006241;
+$blue : #4795F1;
+$orange : #ffdd00;
+$orangeRed : #ff8400;
+$yellow : #E7FF56;
+$red : #F1416C;
+$darkRed : #870000;
+$grey : #888888;
+$dark : #122e53;
+
+$softGreen : #50cd8828;
+$softBlue : #4795F125;
+$softYellow : #E7FF5645;
+$softRed : #F1416C20;
+$softGrey : #88888835;
+$softOrange : #ffdd0020;
+$softOrangeRed : #ff840020;
+$softDark : #122e5330;
+
+@import "form.scss";
