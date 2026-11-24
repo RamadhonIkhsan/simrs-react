@@ -7,13 +7,11 @@ import {
     EyeOutlined,
     LoadingOutlined,
     LockOutlined,
-    SafetyCertificateOutlined,
     UserOutlined,
 } from '@ant-design/icons';
 import useAuth from '@/hooks/useAuth';
 import { API } from '@/lib/API';
 import userStore from '@/store/userStore';
-import ForgotPasswordModal from './ForgotPasswordModal';
 import './style.scss';
 
 const Login = () => {
@@ -24,7 +22,6 @@ const Login = () => {
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [errorLogin, setErrorLogin] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [forgotModalOpen, setForgotModalOpen] = useState(false);
 
     const {
         register,
@@ -90,14 +87,13 @@ const Login = () => {
                                 alt="Logo SIMRS"
                                 className="lv3-logo-img"
                             />
-                            <span className="lv3-logo-text"></span>
                         </div>
 
                         {/* Branding */}
                         <div className="lv3-brand">
                             <div className="lv3-brand-accent" />
                             <h1 className="lv3-brand-title">
-                                SIMRS <small>System</small>
+                                SIMRS
                             </h1>
                             <p className="lv3-brand-subtitle">
                                 Sistem Informasi Manajemen Rumah Sakit
@@ -235,7 +231,7 @@ const Login = () => {
                             </div>
 
                             {/* Options */}
-                            <div className="lv3-options">
+                            {/* <div className="lv3-options">
                                 <button
                                     type="button"
                                     className="lv3-forgot"
@@ -243,7 +239,7 @@ const Login = () => {
                                 >
                                     Lupa password?
                                 </button>
-                            </div>
+                            </div> */}
 
                             {/* Submit */}
                             <div className="lv3-submit-wrap">
@@ -282,7 +278,7 @@ const Login = () => {
                         </form>
 
                         {/* Footer */}
-                        <div className="lv3-footer">
+                        {/* <div className="lv3-footer">
                             <div className="lv3-footer-brand">
                                 <SafetyCertificateOutlined
                                     className="lv3-footer-ico"
@@ -301,15 +297,10 @@ const Login = () => {
                                 <br />
                                 pelayanan rumah sakit berkelanjutan.
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
-
-            <ForgotPasswordModal
-                open={forgotModalOpen}
-                onClose={() => setForgotModalOpen(false)}
-            />
         </>
     );
 };

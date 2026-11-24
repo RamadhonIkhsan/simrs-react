@@ -330,10 +330,10 @@
 
 .my-float-button {
   z-index: 1000 !important;
-  bottom: 20px !important;
+  bottom: 14px !important;
   width: 50px;
   height: 30px;
-  left: 20px;
+  left: 11px;
 
   .ant-float-btn-group-wrap {
     z-index: 999999 !important;
@@ -414,7 +414,8 @@
 
     img {
       height: 34px;
-      margin-left: 10px;
+      margin-left: 4px;
+      margin-bottom: -8px;
       filter: brightness(0) invert(1);
     }
   }
@@ -665,4 +666,8 @@
   .dropdown-footer {
     padding: 10px 15px;
   }
+}
+
+.ant-float-btn-body {
+  background: transparent !important;
 }
