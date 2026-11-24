@@ -35,7 +35,6 @@ const RefTemplate = ({
     listAction = [],
     sizeModal,
     serverSide = false,
-    typeRef,
     initCompanyBranch,
     Initfilter = {},
 }) => {
@@ -97,7 +96,8 @@ const RefTemplate = ({
         confirmOpen('Hapus Data', 'Yakin Hapus Data Ini', async () => {
             setConfirmLoading(true);
             const response = await API.DELETE(`${refEndPointAll}/${id}`);
-            if (response?.status === 200) {
+            const isSuccess = response?.result?.rc === 200;
+            if (isSuccess && response?.status < 400) {
                 notifOpen('Berhasil', 'berhasil hapus data');
                 await getData();
                 setConfirmLoading(false);
@@ -120,13 +120,20 @@ const RefTemplate = ({
         confirmOpen(`${titleActive} Data`, `Yakin ${titleActive} Data Ini`, async () => {
             setConfirmLoading(true);
 
-            const response = await API.POST(`${refEndPointAll}`, {
+            const payload = {
                 [primaryKey]: id,
                 isActive: !active,
                 is_active: !active,
-            });
+            };
 
-            if (response?.status === 200) {
+            let response = await API.PUT(`${refEndPointAll}/${id}`, payload);
+            if (response?.status === 404 || response?.status === 405) {
+                response = await API.POST(`${refEndPointAll}`, payload);
+            }
+
+            const isSuccess = response?.status === 200 || response?.result?.rc === 200;
+
+            if (isSuccess && response?.status < 400) {
                 notifOpen('Berhasil', `berhasil ${titleActive} data`);
                 await getData();
                 setConfirmLoading(false);
@@ -210,22 +217,17 @@ const RefTemplate = ({
         setModalLoading(true);
 
         let response;
-        if (typeRef === 'KARYAWAN' && API.POST_KARYAWAN) {
-            response = await API.POST_KARYAWAN(`${refEndPointAll}`, formData);
-        } else if (typeRef === 'SSO' && API.POST_SSO) {
-            response = await API.POST_SSO(`${refEndPointAll}`, formData);
-        } else if (typeRef === 'kartu') {
-            formData.isActive = true;
-            response = await API.POST(`${refEndPointAll}`, formData);
-        } else if (typeRef === 'REST' && isEdit) {
+
+        if (isEdit) {
             response = await API.PUT(`${refEndPointAll}/${FormId}`, formData);
+            if (response?.status === 404 || response?.status === 405) {
+                response = await API.POST(`${refEndPointAll}`, formData);
+            }
         } else {
             response = await API.POST(`${refEndPointAll}`, formData);
         }
 
         const isSuccess =
-            response?.status === 200 ||
-            response?.status === 201 ||
             response?.result?.rc === 200 ||
             response?.result?.rc === 201;
 
@@ -565,6 +567,12 @@ const RefTemplate = ({
         if (FormId === 'new') {
             if (initCompanyBranch) {
                 void setCompanyAndBranch();
+            } else {
+                for (const v of listForm) {
+                    if (v.defaultValue !== undefined && formRef.current) {
+                        void formRef.current.setFormValue(v.name, v.defaultValue);
+                    }
+                }
             }
             setModalLoading(false);
         }

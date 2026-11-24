@@ -98,7 +98,7 @@ body.sidebar-expanded .card-main-content {
 }
 
 .btn.btn-primary:hover {
-  color: var(--dark) !important;
+  color: var(--white) !important;
   background-color: var(--primary);
 }
 
@@ -418,6 +418,21 @@ body.sidebar-expanded .card-main-content {
 .btn.btn-light-danger {
   background-color: var(--danger-light);
   color: var(--danger);
+}
+
+.btn.btn-light-success {
+  background-color: var(--success-light);
+  color: var(--success);
+}
+
+.btn.btn-light-warning {
+  background-color: var(--warning-light);
+  color: var(--warning);
+}
+
+.btn.btn-light-info {
+  background-color: var(--info-light);
+  color: var(--info);
 }
 
 .text-primary {

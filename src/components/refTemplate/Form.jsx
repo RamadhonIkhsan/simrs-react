@@ -123,12 +123,19 @@ const Form = forwardRef(
                 if (FormId !== 'new' && listDisabled.includes(name)) {
                     delete data[name];
                 }
+                if (FormId !== 'new' && (data[name] === '' || data[name] === undefined)) {
+                    const fieldCfg = listForm?.find((f) => f.name === name);
+                    if (fieldCfg?.type === 'password') {
+                        delete data[name];
+                    }
+                }
             }
 
             storeData(data);
         };
 
-        const companyId = useWatch({ control, name: 'companyId' });
+        const watchedValues = useWatch({ control });
+        const companyId = watchedValues?.companyId;
         useEffect(() => {
             if (preserveBranchOnCompanyChange.current) {
                 preserveBranchOnCompanyChange.current = false;
@@ -191,7 +198,10 @@ const Form = forwardRef(
                                         setReadonly = true;
                                     }
 
-                                    const setRequired = v.required;
+                                    const setRequired =
+                                        FormId !== 'new' && v.type === 'password'
+                                            ? Boolean(v.requiredOnEdit)
+                                            : v.required;
 
                                     if (v.type === 'text') {
                                         return (
@@ -308,7 +318,7 @@ const Form = forwardRef(
                                                     setReadonly={setReadonly || v.readOnly}
                                                     setDisabled={setDisabled}
                                                     options={v.listData}
-                                                    val={getValues(v.name)}
+                                                    val={watchedValues?.[v.name] ?? getValues(v.name)}
                                                     placeholder={'Daftar ' + v.alias}
                                                     setValue={setValue}
                                                     getDataOnChange={
@@ -388,7 +398,7 @@ const Form = forwardRef(
                                     }
 
                                     if (v.type === 'switch') {
-                                        const rawVal = getValues(v.name);
+                                        const rawVal = watchedValues?.[v.name] ?? getValues(v.name);
                                         return (
                                             <Col span={v.col || 24} key={v.name}>
                                                 <Input.Switch
@@ -411,7 +421,7 @@ const Form = forwardRef(
                                                     setValue={setValue}
                                                     setReadonly={setReadonly}
                                                     required={setRequired}
-                                                    value={getValues(v.name)}
+                                                    value={watchedValues?.[v.name] ?? getValues(v.name)}
                                                     register={register}
                                                     error={errors}
                                                 />
@@ -428,7 +438,7 @@ const Form = forwardRef(
                                                     setValue={setValue}
                                                     setReadonly={setReadonly}
                                                     required={setRequired}
-                                                    value={getValues(v.name)}
+                                                    value={watchedValues?.[v.name] ?? getValues(v.name)}
                                                     register={register}
                                                     error={errors}
                                                 />

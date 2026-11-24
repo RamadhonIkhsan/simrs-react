@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import './assets/style.scss'
 import './assets/form.scss'
+import './assets/table.scss'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(

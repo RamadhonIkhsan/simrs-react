@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { Helper } from '@/lib/Helper';
@@ -21,17 +22,20 @@ const InputDate = ({
     picker = 'default',
     format = picker === 'month' ? 'MMM YYYY' : picker === 'year' ? 'YYYY' : 'DD MMM YYYY',
 }) => {
-    const setRequired = required ? { required: `Data ${title} Harus di Isi` } : {};
-    const setMaxLength = maxlength
-        ? {
-              maxLength: {
-                  value: maxlength,
-                  message: `Maksimal ${maxlength} Karakter`,
-              },
-          }
-        : {};
-
-    const validateList = { ...setRequired, ...setMaxLength };
+    useEffect(() => {
+        if (register && name) {
+            const setRequired = required ? { required: `Data ${title} Harus di Isi` } : {};
+            const setMaxLength = maxlength
+                ? {
+                      maxLength: {
+                          value: maxlength,
+                          message: `Maksimal ${maxlength} Karakter`,
+                      },
+                  }
+                : {};
+            register(name, { ...setRequired, ...setMaxLength });
+        }
+    }, [register, name, required, maxlength, title]);
 
     const onChange = (_, dateString) => {
         if (dateString) {
@@ -58,12 +62,11 @@ const InputDate = ({
     return (
         <div
             className={`form-group ${style === 'header' ? 'mb-0' : 'mb-10'} ${
-                error[name]?.message ? 'error' : ''
+                error?.[name]?.message ? 'error' : ''
             }`}
         >
             <div className={`floating-label-content ${style === 'header' ? 'mb-0' : ''}`}>
                 <DatePicker
-                    {...register(name, validateList)}
                     name={name}
                     id={name}
                     format={newFormat}
@@ -81,7 +84,7 @@ const InputDate = ({
                 <label className="floating-label" htmlFor={name}>
                     {title} {required ? <span className="fw-7 text-danger">*</span> : ''}
                 </label>
-                {error[name] && <div className="error-form">{error[name]?.message}</div>}
+                {error?.[name] && <div className="error-form">{error[name]?.message}</div>}
             </div>
         </div>
     );

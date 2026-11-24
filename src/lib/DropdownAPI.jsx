@@ -65,6 +65,31 @@ const diagnose = async (search = '') => {
     }));
 };
 
+const roles = async () => {
+    const fallbackRoles = [
+        { value: 1, label: 'Administrator', code: 'ADMIN' },
+        { value: 2, label: 'Petugas Pendaftaran', code: 'REGISTRATION' },
+        { value: 3, label: 'Dokter', code: 'DOCTOR' },
+        { value: 4, label: 'Petugas Farmasi', code: 'PHARMACY' },
+        { value: 5, label: 'Petugas Laboratorium', code: 'LAB' },
+        { value: 6, label: 'Kasir', code: 'CASHIER' },
+    ];
+    try {
+        const response = await API.GET('/api/roles/options');
+        const list = response?.result?.data;
+        if (Array.isArray(list) && list.length > 0) {
+            return list.map((v) => ({
+                value: v.id,
+                label: v.name || v.nm || v.code,
+                code: v.code,
+            }));
+        }
+        return fallbackRoles;
+    } catch {
+        return fallbackRoles;
+    }
+};
+
 export const DropdownAPI = {
     polis,
     doctors,
@@ -72,4 +97,5 @@ export const DropdownAPI = {
     drugs,
     labTest,
     diagnose,
+    roles,
 };

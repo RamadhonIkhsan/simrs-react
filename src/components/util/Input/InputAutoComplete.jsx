@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { AutoComplete } from 'antd';
 
 const InputAutoComplete = ({
@@ -14,31 +15,31 @@ const InputAutoComplete = ({
     val,
     onSearch,
     getDataOnChange,
-    notFoundContent = false
+    notFoundContent = false,
 }) => {
-    
-    let setRequired = (required) ? { required: `Data ${title} Harus di Isi` } : {}
-    let validateList = { ...setRequired };
+    useEffect(() => {
+        if (register && name) {
+            register(name, required ? { required: `Data ${title} Harus di Isi` } : {});
+        }
+    }, [register, name, required, title]);
 
     const onChange = (value) => {
-        let arrFilter = options?.find(item => item.value === value);
+        const arrFilter = options?.find((item) => item.value === value);
         setValue(name, arrFilter || value, { shouldValidate: true });
         if (getDataOnChange) getDataOnChange(arrFilter || value, setValue);
     };
-        
+
     return (
         <>
-            <div className={`form-group mb-10 ${error[name]?.message ? "error" : ""}`}>
+            <div className={`form-group mb-10 ${error?.[name]?.message ? 'error' : ''}`}>
                 <div className="floating-label-content">
                     <AutoComplete
                         disabled={setReadonly || setDisabled}
-                        {...register(name, validateList)}
                         name={name}
                         id={name}
                         value={val?.label}
                         allowClear
                         onChange={onChange}
-                        // filterOption={filterOption}
                         options={options}
                         style={{ width: '100%' }}
                         placeholder={placeholder}
@@ -48,9 +49,9 @@ const InputAutoComplete = ({
                         notFoundContent={notFoundContent}
                     />
                     <label className="floating-label" htmlFor={name}>
-                        {title} {(required) ? <span className={"fw-7 text-danger"}>*</span> : ''}
+                        {title} {required ? <span className="fw-7 text-danger">*</span> : ''}
                     </label>
-                    {error[name] && <div className="error-form">{error[name]?.message}</div>}
+                    {error?.[name] && <div className="error-form">{error[name]?.message}</div>}
                 </div>
             </div>
         </>
