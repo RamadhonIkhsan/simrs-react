@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { ConfigProvider, Spin } from 'antd';
+import { ConfigProvider, Empty, Spin } from 'antd';
 import WrapperContent from '@/components/layout/WrapperContent';
 import useAuth from '@/hooks/useAuth';
 import { API } from '@/lib/API';
@@ -8,6 +8,23 @@ import Login from '@/login';
 import Dashboard from '@/main/dashboard';
 import userStore from '@/store/userStore';
 import './App.css';
+
+const pageModules = import.meta.glob('./main/**/index.jsx');
+
+const dynamicRoutes = Object.entries(pageModules).flatMap(([filePath, importer]) => {
+    const relativePath = filePath
+        .replace(/^\.\/main/, '')
+        .replace(/\/index\.jsx$/, '');
+    const mainRoutePath = `/main${relativePath}`;
+    const shortRoutePath = relativePath || '/';
+    const PageComponent = lazy(importer);
+
+    const routes = [{ path: mainRoutePath, Component: PageComponent }];
+    if (shortRoutePath !== '/' && shortRoutePath !== mainRoutePath) {
+        routes.push({ path: shortRoutePath, Component: PageComponent });
+    }
+    return routes;
+});
 
 const verifyTokenSession = async () => {
     const token = await API.getToken();
@@ -82,7 +99,15 @@ const ProtectedLayout = () => {
 
     return (
         <WrapperContent>
-            <Outlet />
+            <Suspense
+                fallback={
+                    <div style={{ padding: '48px', textAlign: 'center' }}>
+                        <Spin size="large" />
+                    </div>
+                }
+            >
+                <Outlet />
+            </Suspense>
         </WrapperContent>
     );
 };
@@ -153,10 +178,21 @@ function App() {
                         }
                     />
                     <Route element={<ProtectedLayout />}>
+                        {dynamicRoutes.map(({ path, Component }) => (
+                            <Route key={path} path={path} element={<Component />} />
+                        ))}
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="*" element={<Dashboard />} />
+                        <Route path="/main/dashboard" element={<Dashboard />} />
+                        <Route
+                            path="*"
+                            element={
+                                <div style={{ padding: '48px' }}>
+                                    <Empty description="Halaman belum tersedia" />
+                                </div>
+                            }
+                        />
                     </Route>
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/" element={<Navigate to="/main/dashboard" replace />} />
                 </Routes>
             </BrowserRouter>
         </ConfigProvider>

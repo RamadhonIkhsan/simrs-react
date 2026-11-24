@@ -213,7 +213,7 @@ function filterObjectByKeys(obj, keysToKeep) {
     return filteredObject;
 }
 
-function UcFirstWord(str) {
+function ucFirstWord(str) {
     if (!str) return '';
     const pieces = String(str).split(' ');
     for (let i = 0; i < pieces.length; i++) {
@@ -237,10 +237,11 @@ export const Helper = {
     dateFormat,
     monthFormat,
     setFormatInputDate,
-    UcFirstWord,
+    UcFirstWord: ucFirstWord,
 };
 
 export const ROLE = {
+    SUPER_ADMIN: 1,
     ADMIN: 1,
     REGISTRATION: 2,
     DOCTOR: 3,
