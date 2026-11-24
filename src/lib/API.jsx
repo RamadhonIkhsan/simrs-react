@@ -54,12 +54,16 @@ const getRequest = async (url, refreshToken, service = 'yii') => {
         });
 
         const isLoginEndpoint = url === '/api/login' || url === '/login';
-        if ((res.status === 401 || res.status === 403) && !isLoginEndpoint) {
+        if (res.status === 401 && !isLoginEndpoint) {
             await deleteTokenCookie();
             return window.location.replace('/login');
         }
 
         const result = await res.json();
+        if (result?.rc === 401 && !isLoginEndpoint) {
+            await deleteTokenCookie();
+            return window.location.replace('/login');
+        }
 
         return {
             status: res.status,
@@ -104,7 +108,7 @@ const getAuthRequest = async (url, service = 'yii') => {
     }
 };
 
-const postRequest = async (url, data, service = 'yii') => {
+const postRequest = async (url, data, service = 'yii', extraHeaders = {}) => {
     const token = await getToken();
     try {
         const res = await fetch(resolveUrl(url, service), {
@@ -112,17 +116,22 @@ const postRequest = async (url, data, service = 'yii') => {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
+                ...(extraHeaders || {}),
             },
             body: JSON.stringify(data),
         });
 
         const isLoginEndpoint = url === '/api/login' || url === '/login';
-        if ((res.status === 401 || res.status === 403) && !isLoginEndpoint) {
+        if (res.status === 401 && !isLoginEndpoint) {
             await deleteTokenCookie();
             return window.location.replace('/login');
         }
 
         const result = await res.json();
+        if (result?.rc === 401 && !isLoginEndpoint) {
+            await deleteTokenCookie();
+            return window.location.replace('/login');
+        }
         return {
             status: res.status,
             statusText: res.statusText,
@@ -152,12 +161,16 @@ const putRequest = async (url, data, service = 'yii') => {
         });
 
         const isLoginEndpoint = url === '/api/login' || url === '/login';
-        if ((res.status === 401 || res.status === 403) && !isLoginEndpoint) {
+        if (res.status === 401 && !isLoginEndpoint) {
             await deleteTokenCookie();
             return window.location.replace('/login');
         }
 
         const result = await res.json();
+        if (result?.rc === 401 && !isLoginEndpoint) {
+            await deleteTokenCookie();
+            return window.location.replace('/login');
+        }
         return {
             status: res.status,
             statusText: res.statusText,
@@ -186,12 +199,16 @@ const deleteRequest = async (url, service = 'yii') => {
         });
 
         const isLoginEndpoint = url === '/api/login' || url === '/login';
-        if ((res.status === 401 || res.status === 403) && !isLoginEndpoint) {
+        if (res.status === 401 && !isLoginEndpoint) {
             await deleteTokenCookie();
             return window.location.replace('/login');
         }
 
         const result = await res.json();
+        if (result?.rc === 401 && !isLoginEndpoint) {
+            await deleteTokenCookie();
+            return window.location.replace('/login');
+        }
         return {
             status: res.status,
             statusText: res.statusText,

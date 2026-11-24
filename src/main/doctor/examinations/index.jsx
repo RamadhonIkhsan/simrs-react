@@ -43,6 +43,7 @@ import { DropdownAPI } from '@/lib/DropdownAPI';
 import { Helper } from '@/lib/Helper';
 import confirmStore from '@/store/confirmStore';
 import notifStore from '@/store/notifStore';
+import userStore from '@/store/userStore';
 
 const emptyVitalSigns = {
     systolic: '',
@@ -111,8 +112,23 @@ const renderExamStatusBadge = (status) => {
 export default function DoctorExaminationsPage() {
     const { notifOpen } = notifStore();
     const { confirmOpen, confirmClose, setConfirmLoading } = confirmStore();
+    const { dataUser } = userStore();
 
-    const [queueViewMode, setQueueViewMode] = useState('waiting');
+    const isNonDoctorRole = useMemo(() => {
+        if (!dataUser) return false;
+        const roleId = Number(dataUser.role_id ?? dataUser.roles ?? 0);
+        const roleCode = String(
+            dataUser.role_code ?? dataUser.role_name ?? dataUser.role ?? ''
+        ).toUpperCase();
+        if (roleId === 3 || roleCode === 'DOCTOR' || roleCode.includes('DOKTER')) {
+            return false;
+        }
+        return Boolean(roleId || roleCode);
+    }, [dataUser]);
+
+    const [queueViewMode, setQueueViewMode] = useState(
+        () => (isNonDoctorRole ? 'all' : 'waiting')
+    );
     const [filterDate, setFilterDate] = useState(Helper.today());
     const [filterStatus, setFilterStatus] = useState('');
     const [searchText, setSearchText] = useState('');
@@ -974,14 +990,15 @@ export default function DoctorExaminationsPage() {
     }, [queueViewMode, waitingList, allVisitsList, filterStatus, searchText]);
 
     const queueStats = useMemo(() => {
-        const counts = { WAITING: 0, CALLED: 0, EXAMINING: 0, total: waitingList.length };
-        waitingList.forEach((item) => {
+        const list = queueViewMode === 'waiting' ? waitingList : allVisitsList;
+        const counts = { WAITING: 0, CALLED: 0, EXAMINING: 0, total: list.length };
+        list.forEach((item) => {
             if (counts[item.status] !== undefined) {
                 counts[item.status] += 1;
             }
         });
         return counts;
-    }, [waitingList]);
+    }, [queueViewMode, waitingList, allVisitsList]);
 
     const isExamFinal = activeExam?.status === 'FINAL';
     const isVisitDone = activeExam?.visit?.status === 'DONE';
