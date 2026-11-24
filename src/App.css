@@ -341,3 +341,101 @@ body.sidebar-expanded .card-main-content {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+
+/* RefTemplate Layout & Utility Classes */
+.containers {
+  padding: 8px 4px;
+}
+
+.headContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.containerTitle .breadCrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.containerTitle .breadCrumb .text + .text::before {
+  content: '/';
+  margin-right: 6px;
+  color: var(--text-muted);
+}
+
+.containerTitle .title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--black);
+  margin-top: 2px;
+}
+
+.headContent .filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-table {
+  background: var(--white);
+  border-radius: 16px;
+}
+
+.zn-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 10;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--black);
+  cursor: pointer;
+  text-align: left;
+}
+
+.btn.btn-danger {
+  background-color: var(--danger);
+  color: var(--white-inverse);
+}
+
+.btn.btn-light-danger {
+  background-color: var(--danger-light);
+  color: var(--danger);
+}
+
+.text-primary {
+  color: var(--primary-dark);
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-warning {
+  color: var(--warning);
+}
+
+.text-info {
+  color: var(--info);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}

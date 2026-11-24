@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import ModalConfirm from '@/components/util/ModalConfirm';
+import ModalNotif from '@/components/util/ModalNotif';
 import menuStore from '@/store/menuStore';
 import Sidebar from './Sidebar/Sidebar';
 
@@ -30,6 +32,8 @@ export default function WrapperContent({ children }) {
                     <div className="card-layout">{children}</div>
                 </MotionDiv>
             </div>
+            <ModalConfirm />
+            <ModalNotif />
         </>
     );
 }
