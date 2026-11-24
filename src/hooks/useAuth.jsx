@@ -1,23 +1,23 @@
-"use client"
-import {API} from "@/lib/API";
+import { useCallback } from 'react';
+import { API } from '@/lib/API';
 
 const useAuth = () => {
-    const setAuth = async (token, user) => {
-        let res = await API.SET_COOKIE(token)
+    const setAuth = useCallback(async (token, user) => {
+        const res = await API.SET_COOKIE(token);
         localStorage.setItem('userId', user);
 
-        return res
-    }
+        return res;
+    }, []);
 
-    const removeAuth = async () => {
-        await API.DELETE_COOKIE()
-        localStorage.removeItem('userId')
-    }
+    const removeAuth = useCallback(async () => {
+        await API.DELETE_COOKIE();
+        localStorage.removeItem('userId');
+    }, []);
 
     return {
         setAuth,
-        removeAuth
-    }
-}
+        removeAuth,
+    };
+};
 
-export default useAuth
+export default useAuth;

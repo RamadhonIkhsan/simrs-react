@@ -1,18 +1,30 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Button, Card } from 'antd';
-import Input from '@/components/util/Input';
+import {
+    ArrowRightOutlined,
+    EyeInvisibleOutlined,
+    EyeOutlined,
+    LoadingOutlined,
+    LockOutlined,
+    SafetyCertificateOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
 import useAuth from '@/hooks/useAuth';
 import { API } from '@/lib/API';
 import userStore from '@/store/userStore';
+import ForgotPasswordModal from './ForgotPasswordModal';
+import './style.scss';
 
 const Login = () => {
     const navigate = useNavigate();
     const { setAuth } = useAuth();
     const { setDataUser } = userStore();
-    const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+
+    const [loadingLogin, setLoadingLogin] = useState(false);
+    const [errorLogin, setErrorLogin] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [forgotModalOpen, setForgotModalOpen] = useState(false);
 
     const {
         register,
@@ -25,14 +37,14 @@ const Login = () => {
         },
     });
 
-    const onSubmit = async (values) => {
-        setLoading(true);
-        setErrorMessage('');
+    const storeData = handleSubmit(async (payload) => {
+        setLoadingLogin(true);
+        setErrorLogin('');
 
         try {
             const response = await API.POST('/api/login', {
-                username: values.username,
-                password: values.password,
+                username: payload.username,
+                password: payload.password,
             });
 
             const resData = response?.result;
@@ -43,72 +55,262 @@ const Login = () => {
                 setDataUser(user || {});
                 navigate('/dashboard', { replace: true });
             } else {
-                setErrorMessage(
+                setErrorLogin(
                     resData?.rm ||
                         resData?.message ||
                         'Login gagal. Periksa kembali username dan password Anda.'
                 );
             }
         } catch {
-            setErrorMessage('Terjadi kesalahan koneksi ke server.');
+            setErrorLogin('Terjadi kesalahan pada sistem.');
         } finally {
-            setLoading(false);
+            setLoadingLogin(false);
         }
-    };
+    });
 
     return (
-        <div className="login-page">
-            <Card className="login-card" bordered={false}>
-                <div className="login-header">
-                    <h2 className="login-title">SIMRS</h2>
-                    <p className="login-subtitle">Silakan masuk ke akun Anda</p>
+        <>
+            <div className="lv3">
+                {/* ======================== LEFT PANEL ======================== */}
+                <div className="lv3-left">
+                    <div className="lv3-left-bg">
+                        <img
+                            src="/img/hospital-building.jpg"
+                            alt="Hospital Building"
+                            className="lv3-left-bg-img"
+                        />
+                        <div className="lv3-left-bg-overlay" />
+                    </div>
+
+                    <div className="lv3-left-content">
+                        {/* Logo */}
+                        <div className="lv3-logo">
+                            <img
+                                src="/img/logo-harkel.png"
+                                alt="Logo SIMRS"
+                                className="lv3-logo-img"
+                            />
+                            <span className="lv3-logo-text"></span>
+                        </div>
+
+                        {/* Branding */}
+                        <div className="lv3-brand">
+                            <div className="lv3-brand-accent" />
+                            <h1 className="lv3-brand-title">
+                                SIMRS <small>System</small>
+                            </h1>
+                            <p className="lv3-brand-subtitle">
+                                Sistem Informasi Manajemen Rumah Sakit
+                            </p>
+                            <p className="lv3-brand-desc">
+                                Pelayanan kesehatan terpadu,
+                                <br />
+                                cepat, akurat, dan terintegrasi
+                                <br />
+                                untuk keselamatan pasien.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Values */}
+                    <div className="lv3-values">
+                        <span>Integritas</span>
+                        <span className="lv3-values-sep">|</span>
+                        <span>Profesionalisme</span>
+                        <span className="lv3-values-sep">|</span>
+                        <span>Inovasi</span>
+                    </div>
+
+                    {/* Decorative accents — static SVG */}
+                    <img
+                        src="/img/accent-tr.svg"
+                        alt=""
+                        aria-hidden="true"
+                        className="lv3-accent-tr"
+                        draggable={false}
+                    />
                 </div>
 
-                {errorMessage && (
-                    <Alert
-                        message={errorMessage}
-                        type="error"
-                        showIcon
-                        closable
-                        onClose={() => setErrorMessage('')}
-                        style={{ marginBottom: 20 }}
+                {/* ======================== RIGHT PANEL ======================== */}
+                <div className="lv3-right">
+                    {/* Decorative accents — static SVG */}
+                    <img
+                        src="/img/accent-bl.svg"
+                        alt=""
+                        aria-hidden="true"
+                        className="lv3-accent-bl"
+                        draggable={false}
                     />
-                )}
-
-                <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                    <Input.Text
-                        title="Username"
-                        name="username"
-                        register={register}
-                        error={errors}
-                        required={true}
-                        maxlength={100}
-                        placeholder=" "
+                    <img
+                        src="/img/accent-tr2.svg"
+                        alt=""
+                        aria-hidden="true"
+                        className="lv3-accent-tr2"
+                        draggable={false}
                     />
 
-                    <Input.Password
-                        title="Password"
-                        name="password"
-                        register={register}
-                        error={errors}
-                        required={true}
-                        maxlength={100}
-                        placeholder=" "
-                    />
+                    <div className="lv3-right-inner">
+                        {/* Header */}
+                        <div className="lv3-header">
+                            <h2 className="lv3-welcome">Selamat Datang</h2>
+                            <p className="lv3-welcome-sub">
+                                Silakan masuk ke akun SIMRS Anda.
+                            </p>
+                        </div>
 
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={loading}
-                        block
-                        size="large"
-                        className="login-submit-btn"
-                    >
-                        Masuk
-                    </Button>
-                </form>
-            </Card>
-        </div>
+                        {/* Form */}
+                        <form onSubmit={storeData} className="lv3-form" noValidate>
+                            {/* Username */}
+                            <div className="lv3-field">
+                                <label htmlFor="username-input" className="sr-only">
+                                    Username atau Email
+                                </label>
+                                <div className="lv3-input-box">
+                                    <UserOutlined
+                                        className="lv3-input-ico"
+                                        aria-hidden="true"
+                                    />
+                                    <input
+                                        id="username-input"
+                                        type="text"
+                                        {...register('username', {
+                                            required: 'Username harus diisi',
+                                        })}
+                                        placeholder="Username atau Email"
+                                        className="lv3-input"
+                                        autoComplete="username"
+                                        aria-label="Username atau Email"
+                                    />
+                                </div>
+                                {errors.username && (
+                                    <div className="lv3-field-err" role="alert">
+                                        {errors.username.message}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Password */}
+                            <div className="lv3-field">
+                                <label htmlFor="password-input" className="sr-only">
+                                    Password
+                                </label>
+                                <div className="lv3-input-box">
+                                    <LockOutlined
+                                        className="lv3-input-ico"
+                                        aria-hidden="true"
+                                    />
+                                    <input
+                                        id="password-input"
+                                        type={showPassword ? 'text' : 'password'}
+                                        {...register('password', {
+                                            required: 'Password harus diisi',
+                                        })}
+                                        placeholder="Password"
+                                        className="lv3-input"
+                                        autoComplete="current-password"
+                                        aria-label="Password"
+                                    />
+                                    <button
+                                        type="button"
+                                        className="lv3-eye"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={
+                                            showPassword
+                                                ? 'Sembunyikan password'
+                                                : 'Tampilkan password'
+                                        }
+                                    >
+                                        {showPassword ? (
+                                            <EyeOutlined aria-hidden="true" />
+                                        ) : (
+                                            <EyeInvisibleOutlined aria-hidden="true" />
+                                        )}
+                                    </button>
+                                </div>
+                                {errors.password && (
+                                    <div className="lv3-field-err" role="alert">
+                                        {errors.password.message}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Options */}
+                            <div className="lv3-options">
+                                <button
+                                    type="button"
+                                    className="lv3-forgot"
+                                    onClick={() => setForgotModalOpen(true)}
+                                >
+                                    Lupa password?
+                                </button>
+                            </div>
+
+                            {/* Submit */}
+                            <div className="lv3-submit-wrap">
+                                <button
+                                    type="submit"
+                                    className="lv3-submit"
+                                    disabled={loadingLogin}
+                                    aria-busy={loadingLogin}
+                                >
+                                    {loadingLogin ? (
+                                        <>
+                                            <LoadingOutlined
+                                                style={{ marginRight: 6, fontSize: 15 }}
+                                                spin
+                                            />
+                                            Memproses...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Masuk
+                                            <ArrowRightOutlined
+                                                style={{ marginLeft: 8, fontSize: 14 }}
+                                                aria-hidden="true"
+                                            />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Error */}
+                            {errorLogin && (
+                                <div className="lv3-error-msg" role="alert">
+                                    {errorLogin}
+                                </div>
+                            )}
+                        </form>
+
+                        {/* Footer */}
+                        <div className="lv3-footer">
+                            <div className="lv3-footer-brand">
+                                <SafetyCertificateOutlined
+                                    className="lv3-footer-ico"
+                                    aria-hidden="true"
+                                />
+                                <div>
+                                    <div className="lv3-footer-name">SIMRS</div>
+                                    <div className="lv3-footer-sub">Healthcare System</div>
+                                </div>
+                            </div>
+                            <div className="lv3-footer-sep" />
+                            <div className="lv3-footer-tag">
+                                Tata kelola layanan medis yang baik,
+                                <br />
+                                rekam medis yang terintegrasi,
+                                <br />
+                                pelayanan rumah sakit berkelanjutan.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ForgotPasswordModal
+                open={forgotModalOpen}
+                onClose={() => setForgotModalOpen(false)}
+            />
+        </>
     );
 };
 
