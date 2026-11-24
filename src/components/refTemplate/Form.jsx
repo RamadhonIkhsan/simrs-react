@@ -108,8 +108,18 @@ const Form = forwardRef(
             const listDisabled = filterInputDisabled();
 
             for (const name in data) {
+                if (FormId !== 'new' && listDisabled.includes(name)) {
+                    delete data[name];
+                    continue;
+                }
+                const fieldCfg = listForm?.find((f) => f.name === name);
+                if (FormId !== 'new' && fieldCfg?.hideOnEdit) {
+                    delete data[name];
+                    continue;
+                }
                 if (listMoney.includes(name)) {
-                    data[name] = parseInt(Helper.numFormatClear(data[name]), 10);
+                    const cleanMoney = Helper.numFormatClear(data[name]);
+                    data[name] = cleanMoney !== '' ? parseInt(cleanMoney, 10) : 0;
                 }
                 if (listDate.includes(name) && data[name]) {
                     data[name] = dayjs(data[name]).format('YYYY-MM-DD');
@@ -120,11 +130,7 @@ const Form = forwardRef(
                 if (listText.includes(name) && data[name] !== undefined && data[name] !== null) {
                     data[name] = String(data[name]);
                 }
-                if (FormId !== 'new' && listDisabled.includes(name)) {
-                    delete data[name];
-                }
                 if (FormId !== 'new' && (data[name] === '' || data[name] === undefined)) {
-                    const fieldCfg = listForm?.find((f) => f.name === name);
                     if (fieldCfg?.type === 'password') {
                         delete data[name];
                     }
@@ -181,6 +187,10 @@ const Form = forwardRef(
                         <Row gutter={16}>
                             {listForm &&
                                 listForm.map((v) => {
+                                    if (v.hideOnEdit && FormId !== 'new') {
+                                        return null;
+                                    }
+
                                     let setReadonly =
                                         FormId !== 'new'
                                             ? v.onEdit

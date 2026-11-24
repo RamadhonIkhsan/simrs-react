@@ -131,7 +131,8 @@ const RefTemplate = ({
                 response = await API.POST(`${refEndPointAll}`, payload);
             }
 
-            const isSuccess = response?.status === 200 || response?.result?.rc === 200;
+            const hasRc = response?.result?.rc !== undefined;
+            const isSuccess = hasRc ? response.result.rc === 200 : response?.status === 200;
 
             if (isSuccess && response?.status < 400) {
                 notifOpen('Berhasil', `berhasil ${titleActive} data`);
@@ -236,11 +237,19 @@ const RefTemplate = ({
             notifOpen('Berhasil', 'berhasil Simpan data');
             await getData();
         } else {
-            notifOpen(
-                'Gagal',
-                response?.result?.rm || response?.result?.message || 'Gagal menyimpan data',
-                'danger'
-            );
+            let errMsg =
+                response?.result?.rm || response?.result?.message || 'Gagal menyimpan data';
+            const errData = response?.result?.data;
+            if (errData && typeof errData === 'object' && !Array.isArray(errData)) {
+                const firstKey = Object.keys(errData)[0];
+                const firstErr = Array.isArray(errData[firstKey])
+                    ? errData[firstKey][0]
+                    : errData[firstKey];
+                if (firstErr) {
+                    errMsg = `${errMsg}: ${firstErr}`;
+                }
+            }
+            notifOpen('Gagal', errMsg, 'danger');
         }
 
         setModalLoading(false);

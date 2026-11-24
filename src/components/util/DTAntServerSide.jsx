@@ -40,7 +40,12 @@ function DTAntServerSide({
             }
 
             const setSize = currentSize ? currentSize : pageSize;
-            const setSearch = search ? `&search=${encodeURIComponent(search)}` : '';
+            const trimmedSearch = String(search || '').trim();
+            if (endPoint === '/api/icd10' && trimmedSearch.length === 1) {
+                setLoading(false);
+                return;
+            }
+            const setSearch = trimmedSearch ? `&search=${encodeURIComponent(trimmedSearch)}` : '';
             const cleanFilter = filter
                 ? Object.fromEntries(
                       Object.entries(filter).filter(
@@ -56,9 +61,12 @@ function DTAntServerSide({
             const paramUser = endPoint === '/ref/user' ? '&webmin=true' : '';
 
             const response = await API.GET(
-                `${endPoint}?page=${page - 1}&size=${setSize}${setSearch}${paramUser}${setFilter}`
+                `${endPoint}?page=${page}&size=${setSize}${setSearch}${paramUser}${setFilter}`
             );
-            if (response?.status !== 200) {
+            const isError =
+                response?.status >= 400 ||
+                (response?.result?.rc !== undefined && response.result.rc >= 400);
+            if (isError) {
                 setLoading(false);
                 notifOpen(
                     'Gagal',

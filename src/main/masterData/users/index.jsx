@@ -35,7 +35,7 @@ export default function Users() {
                     alias: 'Username',
                     maxLength: 100,
                     required: true,
-                    col: 12,
+                    col: 24,
                 },
                 {
                     type: 'email',
@@ -43,14 +43,14 @@ export default function Users() {
                     alias: 'Email',
                     maxLength: 150,
                     required: true,
-                    col: 12,
+                    col: 24,
                 },
                 {
                     type: 'select',
                     name: 'role_id',
                     alias: 'Role',
                     required: true,
-                    col: 12,
+                    col: 24,
                     listData: listRoles,
                 },
             ]);

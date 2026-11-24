@@ -21,8 +21,8 @@ const InputText = ({
             // Hanya huruf, angka, titik, @, _ dan -
             e.target.value = e.target.value.replace(/[^a-zA-Z0-9@._-]/g, "");
         } else {
-            // Default
-            e.target.value = e.target.value.replace(/[^a-zA-Z0-9 @/-]/g, "");
+            // Default: huruf, angka, spasi, titik, koma, tanda hubung, kurung, slash, simbol umum medis
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9 .,@/_()+%:-]/g, "");
         }
     };
 

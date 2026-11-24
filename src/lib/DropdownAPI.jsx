@@ -90,6 +90,30 @@ const roles = async () => {
     }
 };
 
+const doctorUsers = async () => {
+    try {
+        const response = await API.GET('/api/users?size=200');
+        const list = response?.result?.data;
+        if (Array.isArray(list)) {
+            return list
+                .filter(
+                    (u) =>
+                        u.is_active !== false &&
+                        (Number(u.role_id) === 3 ||
+                            String(u.role_name || '').toLowerCase().includes('dokter') ||
+                            String(u.role_name || '').toUpperCase() === 'DOCTOR')
+                )
+                .map((u) => ({
+                    value: u.id,
+                    label: `${u.username} - ${u.full_name || u.name || ''}`,
+                }));
+        }
+        return [];
+    } catch {
+        return [];
+    }
+};
+
 export const DropdownAPI = {
     polis,
     doctors,
@@ -98,4 +122,5 @@ export const DropdownAPI = {
     labTest,
     diagnose,
     roles,
+    doctorUsers,
 };
