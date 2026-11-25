@@ -1516,10 +1516,10 @@ export default function DoctorExaminationsPage() {
                                                                 alignItems: 'center',
                                                             }}
                                                         >
-                                                            <span>
+                                                            <div style={{display: 'flex', gap: '8px'}}>
                                                                 <HeartOutlined className="text-danger me-2" />
                                                                 Tanda Vital (Vital Signs)
-                                                            </span>
+                                                            </div>
                                                             {bmiInfo && (
                                                                 <Tag color={bmiInfo.color}>
                                                                     IMT: {bmiInfo.value} (
@@ -1781,10 +1781,10 @@ export default function DoctorExaminationsPage() {
                                                 <Card
                                                     size="small"
                                                     title={
-                                                        <span>
+                                                        <div style={{display: 'flex', gap: '8px'}}>
                                                             <ProfileOutlined className="text-primary me-2" />
                                                             Catatan Klinis SOAP (Subjective, Objective, Plan)
-                                                        </span>
+                                                        </div>
                                                     }
                                                     style={{ borderRadius: '14px', height: '100%' }}
                                                 >
