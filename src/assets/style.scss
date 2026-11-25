@@ -1,6 +1,6 @@
 :root {
   --primary: #008FD7;
-  --success: #50cd89;
+  --success: #2bb569;
   --info: #7239ea;
   --warning: #FEB82F;
   --danger: #f1416c;
@@ -46,3 +46,166 @@ $softGrey : #88888835;
 $softOrange : #ffdd0020;
 $softOrangeRed : #ff840020;
 $softDark : #122e5330;
+
+
+
+.btn.btn-primary {
+    color: var(--primary-inverse);
+    border-color: var(--primary);
+    background: linear-gradient(-90deg, #092950 0%, #284b76 104.42%);
+}
+
+.btn.btn-light-primary {
+    color: var(--primary);
+    border-color: var(--primary-light);
+    background-color: var(--primary-light);
+}
+
+.btn.btn-success {
+    color: var(--success-inverse);
+    border-color: var(--success);
+    background-color: var(--success);
+}
+
+.btn.btn-light-success {
+    color: var(--success);
+    border-color: var(--success-light);
+    background-color: var(--success-light);
+}
+
+.btn.btn-danger {
+    color: var(--danger-inverse);
+    border-color: var(--danger);
+    background-color: var(--danger);
+}
+
+.btn.btn-light-danger {
+    color: var(--danger);
+    border-color: var(--danger-light);
+    background-color: var(--danger-light);
+}
+
+.btn.btn-warning {
+    color: var(--warning-inverse);
+    border-color: var(--warning);
+    background-color: var(--warning);
+}
+
+.btn.btn-light-warning {
+    color: var(--warning);
+    border-color: var(--warning-light);
+    background-color: var(--warning-light);
+}
+
+.btn.btn-info {
+    color: var(--info-inverse);
+    border-color: var(--info);
+    background-color: var(--info);
+}
+
+.btn.btn-light-info {
+    color: var(--info);
+    border-color: var(--info-light);
+    background-color: var(--info-light);
+}
+
+.btn.btn-dark {
+    color: var(--dark-inverse);
+    border-color: var(--dark);
+    background-color: var(--dark);
+}
+
+.btn.btn-light-dark {
+    color: var(--dark);
+    border-color: var(--dark-light);
+    background-color: var(--dark-light);
+}
+
+.btn.btn-white {
+    color: var(--white-inverse);
+    border-color: var(--white);
+    background-color: var(--white);
+}
+
+.btn.btn-light-white {
+    color: var(--white);
+    border-color: var(--white-light);
+    background-color: var(--white-light);
+}
+
+.btn.btn-circle {
+    border-radius: 50%;
+}
+
+.btn-transparent {
+    background: #ffffff00;
+    color: white;
+    border: 1px solid #ffffff1f;
+}
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    height: 35px;
+    padding: 0 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-round-lg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    min-width: 140px;
+    padding: 0 24px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: var(--blue);
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.2s ease;
+}
+
+.btn-circle.btn-sm{
+    width:30px;
+    height:30px;
+    padding: 3px 7px;
+}
+
+.btn-circle-sm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: var(--blue);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}

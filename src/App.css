@@ -246,7 +246,7 @@ body.sidebar-expanded .card-main-content {
   color: var(--black);
   background-color: var(--white);
   border: 1px solid var(--primary-light);
-  border-radius: 10px;
+  border-radius: 20px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -558,4 +558,14 @@ body.sidebar-expanded .card-main-content {
   color: var(--white-inverse) !important;
 }
 
+.ant-alert-content,
+.ant-alert-message {
+  font-size: 12px;
+}
+.ant-alert-message {
+  font-size: 14px !important;
+}
 
+.ant-tag {
+  border-radius: 12px;
+}

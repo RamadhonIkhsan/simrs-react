@@ -1377,7 +1377,7 @@ export default function DoctorExaminationsPage() {
                                         <>
                                             <button
                                                 type="button"
-                                                className="btn btn-light-primary btn-sm"
+                                                className="btn btn-primary btn-sm"
                                                 disabled={savingDraft || finalizingExam}
                                                 onClick={() => void handleSaveDraftExamination(false)}
                                             >
@@ -1387,7 +1387,7 @@ export default function DoctorExaminationsPage() {
 
                                             <button
                                                 type="button"
-                                                className="btn btn-primary btn-sm"
+                                                className="btn btn-success btn-sm"
                                                 disabled={savingDraft || finalizingExam}
                                                 onClick={() => void handleFinalizeExamination()}
                                             >

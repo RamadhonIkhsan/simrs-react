@@ -71,7 +71,7 @@ export default function Users() {
             refEndPointAll="/api/users"
             listAction={listAction}
             primaryKey="id"
-            serverSide={false}
+            serverSide={true}
             columnTableRef={[
                 {
                     title: 'No',

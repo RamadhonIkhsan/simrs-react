@@ -149,7 +149,7 @@ const Login = () => {
                             {/* Username */}
                             <div className="login-field">
                                 <label htmlFor="username-input" className="sr-only">
-                                    Username atau Email
+                                    Username
                                 </label>
                                 <div className="login-input-box">
                                     <UserOutlined
@@ -162,10 +162,10 @@ const Login = () => {
                                         {...register('username', {
                                             required: 'Username harus diisi',
                                         })}
-                                        placeholder="Username atau Email"
+                                        placeholder="Username"
                                         className="login-input"
                                         autoComplete="username"
-                                        aria-label="Username atau Email"
+                                        aria-label="Username"
                                     />
                                 </div>
                                 {errors.username && (

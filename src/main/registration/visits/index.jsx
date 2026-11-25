@@ -896,7 +896,7 @@ export default function VisitsRegistrationPage() {
 
                 <Spin spinning={loadingQueueOverview}>
                     <Row gutter={[12, 12]} style={{ marginBottom: '16px' }}>
-                        <Col xs={12} sm={8} md={4}>
+                        <Col xs={12} sm={8} md={3}>
                             <Card size="small" style={{ borderRadius: '14px' }}>
                                 <div className="text-muted" style={{ fontSize: '12px' }}>
                                     Total Antrean
@@ -906,7 +906,7 @@ export default function VisitsRegistrationPage() {
                                 </div>
                             </Card>
                         </Col>
-                        <Col xs={12} sm={8} md={4}>
+                        <Col xs={12} sm={8} md={3}>
                             <Card size="small" style={{ borderRadius: '14px' }}>
                                 <div className="text-muted" style={{ fontSize: '12px' }}>
                                     Menunggu (WAITING)
@@ -916,7 +916,7 @@ export default function VisitsRegistrationPage() {
                                 </div>
                             </Card>
                         </Col>
-                        <Col xs={12} sm={8} md={4}>
+                        <Col xs={12} sm={8} md={3}>
                             <Card size="small" style={{ borderRadius: '14px' }}>
                                 <div className="text-muted" style={{ fontSize: '12px' }}>
                                     Dipanggil (CALLED)
@@ -926,7 +926,7 @@ export default function VisitsRegistrationPage() {
                                 </div>
                             </Card>
                         </Col>
-                        <Col xs={12} sm={8} md={4}>
+                        <Col xs={12} sm={8} md={3}>
                             <Card size="small" style={{ borderRadius: '14px' }}>
                                 <div className="text-muted" style={{ fontSize: '12px' }}>
                                     Diperiksa (EXAMINING)
@@ -936,7 +936,7 @@ export default function VisitsRegistrationPage() {
                                 </div>
                             </Card>
                         </Col>
-                        <Col xs={12} sm={8} md={4}>
+                        <Col xs={12} sm={8} md={3}>
                             <Card size="small" style={{ borderRadius: '14px' }}>
                                 <div className="text-muted" style={{ fontSize: '12px' }}>
                                     Selesai (DONE)
@@ -946,7 +946,7 @@ export default function VisitsRegistrationPage() {
                                 </div>
                             </Card>
                         </Col>
-                        <Col xs={12} sm={8} md={4}>
+                        <Col xs={12} sm={8} md={8}>
                             <Card size="small" style={{ borderRadius: '14px' }}>
                                 <div className="text-muted" style={{ fontSize: '12px' }}>
                                     Antrean Berikutnya
@@ -962,7 +962,7 @@ export default function VisitsRegistrationPage() {
                                         {queueOverview?.next
                                             ? `#${queueOverview.next.queue_no} (${Helper.limitString(
                                                   queueOverview.next.patient?.full_name || '',
-                                                  12
+                                                  30
                                               )})`
                                             : '-'}
                                     </span>
@@ -1558,53 +1558,75 @@ export default function VisitsRegistrationPage() {
 
             <Modal
                 centered
+                closeIcon={false}
                 open={detailModalOpen}
                 onCancel={() => setDetailModalOpen(false)}
                 footer={null}
                 width="600px"
-                title="Detail Kunjungan & Antrean"
             >
                 <Spin spinning={loadingDetail}>
-                    {detailVisit ? (
-                        <Descriptions bordered column={1} size="small">
-                            <Descriptions.Item label="No. Kunjungan">
-                                <strong>{detailVisit.visit_no}</strong>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Nomor Antrean">
-                                <strong>#{detailVisit.queue_no}</strong>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Status">
-                                {renderStatusBadge(detailVisit.status)}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Tanggal Kunjungan">
-                                {detailVisit.visit_date
-                                    ? Helper.formatDate(detailVisit.visit_date, 'd-M-Y')
-                                    : '-'}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Pasien">
-                                <strong>{detailVisit.patient?.full_name || '-'}</strong> (No. RM:{' '}
-                                {detailVisit.patient?.medical_record_no || '-'}, Usia:{' '}
-                                {detailVisit.patient?.age ?? '-'} thn)
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Poliklinik">
-                                {detailVisit.poli?.name || '-'} ({detailVisit.poli?.code || '-'})
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Dokter Pemeriksa">
-                                {detailVisit.doctor?.full_name || '-'}
-                                {detailVisit.doctor?.specialty
-                                    ? ` - ${detailVisit.doctor.specialty}`
-                                    : ''}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Biaya Pendaftaran (Snapshot)">
-                                Rp {Helper.numFormat(detailVisit.registration_fee || 0)}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Waktu Pendaftaran">
-                                {detailVisit.created_at
-                                    ? Helper.formatDate(detailVisit.created_at, 'd-M-Y H:i:s')
-                                    : '-'}
-                            </Descriptions.Item>
-                        </Descriptions>
-                    ) : null}
+                    <div
+                        className="btn btn-circle btn-light-primary zn-close"
+                        onClick={() => setDetailModalOpen(false)}
+                    >
+                        <CloseOutlined />
+                    </div>
+                    <div className="px-6 py-4 cardDark" style={{ padding: '24px' }}>
+                        <div className="fs-6 fw-normal text-primary" style={{ fontWeight: 600 }}>
+                            Detail Kunjungan &amp; Antrean
+                        </div>
+                        <div className="fs-7 fw-light text-muted" style={{ fontSize: '12px' }}>
+                            Informasi Lengkap Pendaftaran Kunjungan &amp; Status Antrean Pasien
+                        </div>
+                        <div className="separator my-3" style={{ margin: '16px 0' }} />
+                        <div className="my-4">
+                            {detailVisit ? (
+                                <Descriptions bordered column={1} size="small">
+                                    <Descriptions.Item label="No. Kunjungan">
+                                        <strong>{detailVisit.visit_no}</strong>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Nomor Antrean">
+                                        <strong>#{detailVisit.queue_no}</strong>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Status">
+                                        {renderStatusBadge(detailVisit.status)}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Tanggal Kunjungan">
+                                        {detailVisit.visit_date
+                                            ? Helper.formatDate(detailVisit.visit_date, 'd-M-Y')
+                                            : '-'}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Pasien">
+                                        <strong>{detailVisit.patient?.full_name || '-'}</strong> (No. RM:{' '}
+                                        {detailVisit.patient?.medical_record_no || '-'}, Usia:{' '}
+                                        {detailVisit.patient?.age ?? '-'} thn)
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Poliklinik">
+                                        {detailVisit.poli?.name || '-'} ({detailVisit.poli?.code || '-'})
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Dokter Pemeriksa">
+                                        {detailVisit.doctor?.full_name || '-'}
+                                        {detailVisit.doctor?.specialty
+                                            ? ` - ${detailVisit.doctor.specialty}`
+                                            : ''}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Biaya Pendaftaran (Snapshot)">
+                                        Rp {Helper.numFormat(detailVisit.registration_fee || 0)}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Waktu Pendaftaran">
+                                        {detailVisit.created_at
+                                            ? Helper.formatDate(detailVisit.created_at, 'd-M-Y H:i:s')
+                                            : '-'}
+                                    </Descriptions.Item>
+                                </Descriptions>
+                            ) : null}
+                        </div>
+                    </div>
+
+                    <div
+                        className="card-footer text-right py-3 px-5 zn-bg-modal"
+                        style={{ textAlign: 'right' }}
+                    />
                 </Spin>
             </Modal>
 

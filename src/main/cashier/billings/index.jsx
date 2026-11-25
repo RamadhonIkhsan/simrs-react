@@ -18,6 +18,7 @@ import {
     CheckCircleOutlined,
     ClockCircleOutlined,
     CloseCircleOutlined,
+    CloseOutlined,
     CreditCardOutlined,
     DollarOutlined,
     ExclamationCircleOutlined,
@@ -31,6 +32,7 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
+import Input from '@/components/util/Input';
 import { API } from '@/lib/API';
 import { Helper } from '@/lib/Helper';
 import confirmStore from '@/store/confirmStore';
@@ -269,8 +271,8 @@ export default function CashierBillingsPage() {
     const hydratePaymentFormFromBill = useCallback((billData) => {
         if (!billData) return;
         const out = Number(billData.outstanding ?? 0);
-        setPayAmount(out > 0 ? String(out) : '');
-        setTenderedAmount(out > 0 ? String(out) : '');
+        setPayAmount(out > 0 ? Helper.numFormat(out) : '');
+        setTenderedAmount(out > 0 ? Helper.numFormat(out) : '');
         setPayMethod('CASH');
         setPayReferenceNo('');
         setCurrentIdempotencyKey(`pay-${uuidv4()}`);
@@ -421,8 +423,8 @@ export default function CashierBillingsPage() {
     };
 
     const computedChangeAmount = useMemo(() => {
-        const amt = parseFloat(payAmount || '0');
-        const tend = parseFloat(tenderedAmount || '0');
+        const amt = parseFloat(Helper.numFormatClear(payAmount) || '0');
+        const tend = parseFloat(Helper.numFormatClear(tenderedAmount) || '0');
         if (Number.isNaN(amt) || Number.isNaN(tend) || amt <= 0) return 0;
         return Math.max(0, tend - amt);
     }, [payAmount, tenderedAmount]);
@@ -430,8 +432,8 @@ export default function CashierBillingsPage() {
     const handleRecordPayment = async () => {
         if (!activeBill?.id) return;
 
-        const amt = parseFloat(payAmount);
-        const tend = parseFloat(tenderedAmount || payAmount);
+        const amt = parseFloat(Helper.numFormatClear(payAmount));
+        const tend = parseFloat(Helper.numFormatClear(tenderedAmount || payAmount));
         const outstanding = Number(activeBill.outstanding ?? 0);
 
         if (Number.isNaN(amt) || amt <= 0) {
@@ -1000,6 +1002,132 @@ export default function CashierBillingsPage() {
         },
     ];
 
+    const jsonPreviewModalNode = (
+        <Modal
+            centered
+            closeIcon={false}
+            open={jsonPreviewModalOpen}
+            onCancel={() => setJsonPreviewModalOpen(false)}
+            footer={null}
+            width="640px"
+        >
+            <Spin spinning={loadingJsonPreview}>
+                <div
+                    className="btn btn-circle btn-light-primary zn-close"
+                    onClick={() => setJsonPreviewModalOpen(false)}
+                >
+                    <CloseOutlined />
+                </div>
+                <div className="px-6 py-4 cardDark" style={{ padding: '24px' }}>
+                    <div className="fs-6 fw-normal text-primary" style={{ fontWeight: 600 }}>
+                        {jsonPreviewTitle}
+                    </div>
+                    <div className="fs-7 fw-light text-muted" style={{ fontSize: '12px' }}>
+                        Ringkasan Informasi Dokumen Tagihan &amp; Pembayaran Kasir
+                    </div>
+                    <div className="separator my-3" style={{ margin: '16px 0' }} />
+                    <div className="my-4">
+                        {jsonPreviewData?.payload ? (
+                            <Descriptions bordered size="small" column={1}>
+                                <Descriptions.Item label="Rumah Sakit">
+                                    {jsonPreviewData.payload.hospital?.name || '-'}
+                                </Descriptions.Item>
+                                <Descriptions.Item label="Pasien">
+                                    {jsonPreviewData.payload.patient?.full_name || '-'} (No. RM:{' '}
+                                    {jsonPreviewData.payload.patient?.medical_record_no || '-'})
+                                </Descriptions.Item>
+                                {jsonPreviewData.type === 'receipt' ? (
+                                    <>
+                                        <Descriptions.Item label="No. Kuitansi / Struk">
+                                            {jsonPreviewData.payload.header?.payment_no || '-'}
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Nominal Dibayar">
+                                            <strong>
+                                                Rp{' '}
+                                                {Helper.numFormat(
+                                                    jsonPreviewData.payload.payment?.amount || 0
+                                                )}
+                                            </strong>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Terbilang">
+                                            {jsonPreviewData.payload.payment?.amount_terbilang ||
+                                                '-'}
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Status Tagihan">
+                                            {jsonPreviewData.payload.bill_summary?.status_label ||
+                                                '-'}
+                                        </Descriptions.Item>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Descriptions.Item label="No. Invoice">
+                                            {jsonPreviewData.payload.header?.bill_no || '-'}
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Total Tagihan">
+                                            <strong>
+                                                Rp{' '}
+                                                {Helper.numFormat(
+                                                    jsonPreviewData.payload.summary
+                                                        ?.total_amount || 0
+                                                )}
+                                            </strong>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Terbilang">
+                                            {jsonPreviewData.payload.summary?.total_terbilang ||
+                                                '-'}
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Status">
+                                            {jsonPreviewData.payload.summary?.status_label || '-'}
+                                        </Descriptions.Item>
+                                    </>
+                                )}
+                            </Descriptions>
+                        ) : (
+                            <Empty description="Data dokumen tidak tersedia" />
+                        )}
+                    </div>
+                </div>
+
+                <div
+                    className="card-footer text-right py-3 px-5 zn-bg-modal"
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: '8px',
+                    }}
+                >
+                    <button
+                        type="button"
+                        className="btn btn-light-primary btn-sm"
+                        onClick={() => setJsonPreviewModalOpen(false)}
+                    >
+                        Tutup
+                    </button>
+                    {jsonPreviewData?.payload && (
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-sm"
+                            onClick={() => {
+                                const docId =
+                                    jsonPreviewData.type === 'invoice'
+                                        ? jsonPreviewData.payload.header?.bill_id
+                                        : jsonPreviewData.payload.header?.payment_id;
+                                void handleOpenPrintHtmlWindow(
+                                    jsonPreviewData.type,
+                                    docId,
+                                    true
+                                );
+                            }}
+                        >
+                            <PrinterOutlined />
+                            Buka Halaman Cetak
+                        </button>
+                    )}
+                </div>
+            </Spin>
+        </Modal>
+    );
+
     if (activeBill) {
         const isDraft = activeBill.status === 'DRAFT';
         const isIssued = activeBill.status === 'ISSUED';
@@ -1063,7 +1191,7 @@ export default function CashierBillingsPage() {
                                         <PrinterOutlined />
                                         {printingDocKey === `invoice-${activeBill.id}`
                                             ? 'Menyiapkan Cetak...'
-                                            : 'Cetak Invoice (HTML)'}
+                                            : 'Cetak Invoice'}
                                     </button>
                                 </>
                             )}
@@ -1545,10 +1673,10 @@ export default function CashierBillingsPage() {
                                 <Card
                                     size="small"
                                     title={
-                                        <span>
+                                        <div style={{display: 'flex', gap: '8px'}}>
                                             <CreditCardOutlined className="text-primary me-2" />
                                             Loket Pencatatan Pembayaran Kasir
-                                        </span>
+                                        </div>
                                     }
                                     style={{ borderRadius: '14px' }}
                                 >
@@ -1656,7 +1784,7 @@ export default function CashierBillingsPage() {
                                                         }
                                                     >
                                                         <PrinterOutlined />
-                                                        Cetak Rincian Invoice (HTML)
+                                                        Cetak Rincian Invoice
                                                     </button>
                                                 </div>
                                             }
@@ -1696,19 +1824,10 @@ export default function CashierBillingsPage() {
                                                 <div
                                                     style={{
                                                         display: 'flex',
-                                                        justifyContent: 'space-between',
-                                                        marginBottom: '4px',
+                                                        justifyContent: 'flex-end',
+                                                        marginBottom: '6px',
                                                     }}
                                                 >
-                                                    <label
-                                                        htmlFor="pay_amount"
-                                                        style={{
-                                                            fontSize: '12px',
-                                                            fontWeight: 600,
-                                                        }}
-                                                    >
-                                                        Nominal Pembayaran (Amount) *
-                                                    </label>
                                                     <button
                                                         type="button"
                                                         className="btn btn-light-primary btn-sm"
@@ -1718,14 +1837,19 @@ export default function CashierBillingsPage() {
                                                             fontSize: '11px',
                                                         }}
                                                         onClick={() => {
-                                                            setPayAmount(String(outstanding));
+                                                            setPayAmount(
+                                                                Helper.numFormat(outstanding)
+                                                            );
                                                             if (
                                                                 !tenderedAmount ||
-                                                                parseFloat(tenderedAmount) <
-                                                                    outstanding
+                                                                parseFloat(
+                                                                    Helper.numFormatClear(
+                                                                        tenderedAmount
+                                                                    )
+                                                                ) < outstanding
                                                             ) {
                                                                 setTenderedAmount(
-                                                                    String(outstanding)
+                                                                    Helper.numFormat(outstanding)
                                                                 );
                                                             }
                                                         }}
@@ -1734,41 +1858,31 @@ export default function CashierBillingsPage() {
                                                         {Helper.numFormat(outstanding)})
                                                     </button>
                                                 </div>
-                                                <input
-                                                    id="pay_amount"
-                                                    type="number"
-                                                    min={1}
-                                                    max={outstanding}
-                                                    className="form-control"
-                                                    placeholder="Nominal yang dibayarkan..."
-                                                    value={payAmount}
-                                                    onChange={(e) => setPayAmount(e.target.value)}
-                                                />
+                                                <div className="form-group-0">
+                                                    <Input.Money
+                                                        title="Nominal Pembayaran (Amount)"
+                                                        name="pay_amount"
+                                                        required={true}
+                                                        value={payAmount}
+                                                        onChange={(e) =>
+                                                            setPayAmount(e.target.value)
+                                                        }
+                                                    />
+                                                </div>
                                             </div>
 
                                             <div style={{ marginBottom: '12px' }}>
-                                                <label
-                                                    htmlFor="tendered_amount"
-                                                    style={{
-                                                        display: 'block',
-                                                        fontSize: '12px',
-                                                        fontWeight: 600,
-                                                        marginBottom: '4px',
-                                                    }}
-                                                >
-                                                    Uang Tunai Diterima (Tendered Amount) *
-                                                </label>
-                                                <input
-                                                    id="tendered_amount"
-                                                    type="number"
-                                                    min={0}
-                                                    className="form-control"
-                                                    placeholder="Nominal uang yang diserahkan pasien..."
-                                                    value={tenderedAmount}
-                                                    onChange={(e) =>
-                                                        setTenderedAmount(e.target.value)
-                                                    }
-                                                />
+                                                <div className="form-group-0">
+                                                    <Input.Money
+                                                        title="Uang Tunai Diterima (Tendered Amount)"
+                                                        name="tendered_amount"
+                                                        required={true}
+                                                        value={tenderedAmount}
+                                                        onChange={(e) =>
+                                                            setTenderedAmount(e.target.value)
+                                                        }
+                                                    />
+                                                </div>
                                                 <div
                                                     style={{
                                                         display: 'flex',
@@ -1798,7 +1912,7 @@ export default function CashierBillingsPage() {
                                                                 }}
                                                                 onClick={() =>
                                                                     setTenderedAmount(
-                                                                        String(preset)
+                                                                        Helper.numFormat(preset)
                                                                     )
                                                                 }
                                                             >
@@ -2025,104 +2139,7 @@ export default function CashierBillingsPage() {
                     </div>
                 </Modal>
 
-                <Modal
-                    centered
-                    open={jsonPreviewModalOpen}
-                    onCancel={() => setJsonPreviewModalOpen(false)}
-                    title={jsonPreviewTitle}
-                    footer={null}
-                    width="640px"
-                >
-                    <Spin spinning={loadingJsonPreview}>
-                        {jsonPreviewData?.payload ? (
-                            <div style={{ paddingTop: '8px' }}>
-                                <Descriptions
-                                    bordered
-                                    size="small"
-                                    column={1}
-                                    style={{ marginBottom: '14px' }}
-                                >
-                                    <Descriptions.Item label="Rumah Sakit">
-                                        {jsonPreviewData.payload.hospital?.name || '-'}
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="Pasien">
-                                        {jsonPreviewData.payload.patient?.full_name || '-'} (No. RM:{' '}
-                                        {jsonPreviewData.payload.patient?.medical_record_no || '-'})
-                                    </Descriptions.Item>
-                                    {jsonPreviewData.type === 'receipt' ? (
-                                        <>
-                                            <Descriptions.Item label="No. Kuitansi / Struk">
-                                                {jsonPreviewData.payload.header?.payment_no || '-'}
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="Nominal Dibayar">
-                                                <strong>
-                                                    Rp{' '}
-                                                    {Helper.numFormat(
-                                                        jsonPreviewData.payload.payment?.amount || 0
-                                                    )}
-                                                </strong>
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="Terbilang">
-                                                {jsonPreviewData.payload.payment
-                                                    ?.amount_terbilang || '-'}
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="Status Tagihan">
-                                                {jsonPreviewData.payload.bill_summary
-                                                    ?.status_label || '-'}
-                                            </Descriptions.Item>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Descriptions.Item label="No. Invoice">
-                                                {jsonPreviewData.payload.header?.bill_no || '-'}
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="Total Tagihan">
-                                                <strong>
-                                                    Rp{' '}
-                                                    {Helper.numFormat(
-                                                        jsonPreviewData.payload.summary
-                                                            ?.total_amount || 0
-                                                    )}
-                                                </strong>
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="Terbilang">
-                                                {jsonPreviewData.payload.summary?.total_terbilang ||
-                                                    '-'}
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="Status">
-                                                {jsonPreviewData.payload.summary?.status_label ||
-                                                    '-'}
-                                            </Descriptions.Item>
-                                        </>
-                                    )}
-                                </Descriptions>
-
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary btn-sm"
-                                        onClick={() => {
-                                            const docId =
-                                                jsonPreviewData.type === 'invoice'
-                                                    ? jsonPreviewData.payload.header?.bill_id
-                                                    : jsonPreviewData.payload.header?.payment_id;
-                                            void handleOpenPrintHtmlWindow(
-                                                jsonPreviewData.type,
-                                                docId,
-                                                true
-                                            );
-                                        }}
-                                    >
-                                        <PrinterOutlined />
-                                        Buka Halaman Cetak HTML
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <Empty description="Data dokumen tidak tersedia" />
-                        )}
-                    </Spin>
-                </Modal>
+                {jsonPreviewModalNode}
             </>
         );
     }
@@ -2375,6 +2392,7 @@ export default function CashierBillingsPage() {
                     )}
                 </div>
             </div>
+            {jsonPreviewModalNode}
         </div>
     );
 }
