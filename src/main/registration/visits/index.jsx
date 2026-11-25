@@ -5,6 +5,7 @@ import {
     CalendarOutlined,
     CheckCircleOutlined,
     CloseCircleOutlined,
+    CloseOutlined,
     ContainerOutlined,
     ExclamationCircleOutlined,
     NotificationOutlined,
@@ -1006,14 +1007,28 @@ export default function VisitsRegistrationPage() {
 
             <Modal
                 centered
+                closeIcon={false}
                 open={regModalOpen}
                 onCancel={() => setRegModalOpen(false)}
                 width="760px"
                 footer={null}
-                title="Registrasi Kunjungan & Antrean Poliklinik"
             >
                 <Spin spinning={regSubmitting}>
-                    <div style={{ paddingTop: '8px' }}>
+                    <div
+                        className="btn btn-circle btn-light-primary zn-close"
+                        onClick={() => setRegModalOpen(false)}
+                    >
+                        <CloseOutlined />
+                    </div>
+                    <div className="px-6 py-4 cardDark" style={{ padding: '24px' }}>
+                        <div className="fs-6 fw-normal text-primary" style={{ fontWeight: 600 }}>
+                            Registrasi Kunjungan &amp; Antrean Poliklinik
+                        </div>
+                        <div className="fs-7 fw-light text-muted" style={{ fontSize: '12px' }}>
+                            Pendaftaran Kunjungan Pasien, Pemilihan Poliklinik &amp; Jadwal Dokter
+                        </div>
+                        <div className="separator my-3" style={{ margin: '16px 0' }} />
+                        <div className="my-4">
                         <div
                             style={{
                                 display: 'flex',
@@ -1505,37 +1520,38 @@ export default function VisitsRegistrationPage() {
                                 </Row>
                             )}
                         </div>
-
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                gap: '10px',
-                                marginTop: '20px',
-                            }}
-                        >
-                            <button
-                                type="button"
-                                className="btn btn-light-danger"
-                                onClick={() => setRegModalOpen(false)}
-                            >
-                                Batal
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-primary"
-                                disabled={
-                                    !selectedPatient?.id ||
-                                    !regPoliId ||
-                                    !selectedDoctorId ||
-                                    regSubmitting
-                                }
-                                onClick={() => void handleSubmitVisitRegistration()}
-                            >
-                                <CalendarOutlined />
-                                Buat Kunjungan &amp; Ambil Antrean
-                            </button>
                         </div>
+                    </div>
+
+                    <div
+                        className="card-footer text-right py-3 px-5 zn-bg-modal"
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            gap: '10px',
+                        }}
+                    >
+                        <button
+                            type="button"
+                            className="btn btn-light-danger btn-sm"
+                            onClick={() => setRegModalOpen(false)}
+                        >
+                            Batal
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-sm"
+                            disabled={
+                                !selectedPatient?.id ||
+                                !regPoliId ||
+                                !selectedDoctorId ||
+                                regSubmitting
+                            }
+                            onClick={() => void handleSubmitVisitRegistration()}
+                        >
+                            <CalendarOutlined />
+                            Buat Kunjungan &amp; Ambil Antrean
+                        </button>
                     </div>
                 </Spin>
             </Modal>
