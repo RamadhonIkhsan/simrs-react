@@ -6,7 +6,10 @@ const InputText = ({
                        placeholder,
                        maxlength,
                        required,
-                       setReadonly
+                       setReadonly,
+                       type,
+                       value,
+                       onChange
                    }) => {
     let setRequired = (required) ? {required: `Data ${title} Harus di Isi`} : {}
     let setMaxLength = (maxlength) ? {maxLength: {value: maxlength, message: `Maksimal ${maxlength} Karakter`}} : {}
@@ -26,14 +29,21 @@ const InputText = ({
         }
     };
 
+    const registerProps = register ? register(name, validateList) : {};
+
     return (
         <>
-            <div className={`form-group mb-10 ${(error[name]?.message) ? 'error' : ''}`}>
-                <div className="floating-label-content">
+            <div className={`form-group mb-10 ${(error?.[name]?.message) ? 'error' : ''}`}>
+                <div
+                    className="floating-label-content"
+                    style={type === 'filter' ? { marginBottom: 0 } : undefined}
+                >
                     <input
                         type="input"
                         readOnly={setReadonly}
-                        {...register(name, validateList)}
+                        {...registerProps}
+                        {...(value !== undefined ? { value } : {})}
+                        {...(onChange ? { onChange } : {})}
                         className="form-control borderInput floating-input"
                         onInput={handleInput}
                         name={name}
@@ -44,7 +54,7 @@ const InputText = ({
                     <label className="floating-label" htmlFor={name}>
                         {title} {(required) ? <span className={"fw-7 text-danger"}>*</span>:''}
                     </label>
-                    {error[name] && <div className="error-form">{error[name]?.message}</div>}
+                    {error?.[name] && <div className="error-form">{error[name]?.message}</div>}
                 </div>
 
             </div>

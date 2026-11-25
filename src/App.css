@@ -454,3 +454,46 @@ body.sidebar-expanded .card-main-content {
 .text-muted {
   color: var(--text-muted);
 }
+
+/* Ant Design Tabs Custom Styling */
+.ant-tabs .ant-tabs-nav {
+  margin-bottom: 14px;
+}
+
+.ant-tabs .ant-tabs-nav::before {
+  border-bottom: 1px solid var(--primary-light);
+}
+
+.ant-tabs .ant-tabs-tab {
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.ant-tabs .ant-tabs-tab + .ant-tabs-tab {
+  margin-left: 8px;
+}
+
+.ant-tabs .ant-tabs-tab:hover,
+.ant-tabs .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: var(--primary-dark);
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active {
+  background: var(--primary-light);
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--primary-dark) !important;
+  font-weight: 700;
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  background: var(--primary-dark);
+  height: 3px !important;
+  border-radius: 8px;
+}
+

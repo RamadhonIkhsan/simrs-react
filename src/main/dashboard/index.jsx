@@ -26,11 +26,11 @@ import {
     HeartOutlined,
     MedicineBoxOutlined,
     ReloadOutlined,
-    SearchOutlined,
     SolutionOutlined,
     TeamOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import Input from '@/components/util/Input';
 import { API } from '@/lib/API';
 import { DropdownAPI } from '@/lib/DropdownAPI';
 import { Helper } from '@/lib/Helper';
@@ -66,12 +66,12 @@ const renderVisitStatusBadge = (status) => {
 const renderPaymentStatusTag = (rawStatus) => {
     const normalized = String(rawStatus || '').toUpperCase();
     if (normalized === 'PAID' || normalized === 'LUNAS') {
-        return <Tag color="green">LUNAS (PAID)</Tag>;
+        return <span className="btn btn-light-success my-1 btn-sm">LUNAS (PAID)</span>;
     }
     if (normalized === 'PARTIAL' || normalized === 'DIBAYAR_SEBAGIAN') {
-        return <Tag color="gold">SEBAGIAN (PARTIAL)</Tag>;
+        return <span className="btn btn-light-warning my-1 btn-sm">SEBAGIAN (PARTIAL)</span>;
     }
-    return <Tag color="red">BELUM BAYAR (UNPAID)</Tag>;
+    return <span className="btn btn-light-danger my-1 btn-sm">BELUM BAYAR (UNPAID)</span>;
 };
 
 export default function Dashboard() {
@@ -493,9 +493,9 @@ export default function Dashboard() {
             width: '120px',
             align: 'center',
             render: (st) => (
-                <Tag color={st === 'ISSUED' ? 'blue' : 'gold'} style={{ fontWeight: 600 }}>
+                <span className={`btn btn-light-${st === 'ISSUED' ? 'info' : 'warning'} my-1 btn-sm`} style={{ fontWeight: 600 }}>
                     {st || '-'}
-                </Tag>
+                </span>
             ),
         },
         {
@@ -802,23 +802,20 @@ export default function Dashboard() {
                         }}
                     />
 
-                    <select
-                        aria-label="Filter Poliklinik Dashboard"
-                        className="form-control"
-                        style={{ width: '185px', height: '38px', padding: '0 14px' }}
-                        value={selectedPoliId}
-                        onChange={(e) => {
-                            setSelectedPoliId(e.target.value);
-                            setDrillPage(1);
-                        }}
-                    >
-                        <option value="">Semua Poliklinik</option>
-                        {polisOptions.map((p) => (
-                            <option key={p.value} value={p.value}>
-                                {p.label}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="form-group-0" style={{ width: '210px' }}>
+                        <Input.Select
+                            title="Filter Poliklinik Dashboard"
+                            name="filterPoliDashboard"
+                            type="filter"
+                            options={[{ value: '', label: 'Semua Poliklinik' }, ...polisOptions]}
+                            val={selectedPoliId !== '' ? Number(selectedPoliId) : ''}
+                            placeholder="Semua Poliklinik"
+                            setValue={(_, val) => {
+                                setSelectedPoliId(val ? String(val) : '');
+                                setDrillPage(1);
+                            }}
+                        />
+                    </div>
 
                     <button
                         type="button"
@@ -1138,13 +1135,13 @@ export default function Dashboard() {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    <span>
-                                        <BankOutlined className="text-primary me-2" />
-                                        Distribusi Kunjungan per Poliklinik
-                                    </span>
-                                    <span className="text-muted" style={{ fontSize: '12px' }}>
+                                    <div style={{display: 'flex', gap: '8px'}}>
+                                        <BankOutlined className="text-primary" />
+                                        <div>Distribusi Kunjungan per Poliklinik</div>
+                                    </div>
+                                    <div className="text-muted" style={{ fontSize: '12px' }}>
                                         {kunjunganPerPoli.length} Poli
-                                    </span>
+                                    </div>
                                 </div>
                             }
                             style={{ borderRadius: '16px', height: '100%' }}
@@ -1232,10 +1229,10 @@ export default function Dashboard() {
                         <Card
                             size="small"
                             title={
-                                <span>
+                                <div style={{display: 'flex', gap: '8px'}}>
                                     <CalendarOutlined className="text-primary me-2" />
                                     Rincian Status Kunjungan
-                                </span>
+                                </div>
                             }
                             style={{ borderRadius: '16px', height: '100%' }}
                         >
@@ -1257,13 +1254,13 @@ export default function Dashboard() {
                                         background: 'var(--success-light)',
                                     }}
                                 >
-                                    <span style={{ fontSize: '13px', fontWeight: 600 }}>
+                                    <div style={{display: 'flex', gap: '8px', fontSize: '13px', fontWeight: 600}}>
                                         <CheckCircleOutlined className="text-success me-2" />
                                         Selesai Diperiksa (DONE)
-                                    </span>
-                                    <span className="fw-7 text-success" style={{ fontSize: '16px' }}>
+                                    </div>
+                                    <div className="fw-7 text-success" style={{ fontSize: '16px' }}>
                                         {Helper.numFormat(kunjungan.completed)}
-                                    </span>
+                                    </div>
                                 </div>
 
                                 <div
@@ -1276,13 +1273,13 @@ export default function Dashboard() {
                                         background: 'var(--primary-light)',
                                     }}
                                 >
-                                    <span style={{ fontSize: '13px', fontWeight: 600 }}>
+                                    <div style={{display: 'flex', gap: '8px', fontSize: '13px', fontWeight: 600}}>
                                         <SolutionOutlined className="text-primary me-2" />
                                         Sedang Diperiksa (EXAMINING)
-                                    </span>
-                                    <span className="fw-7 text-primary" style={{ fontSize: '16px' }}>
+                                    </div>
+                                    <div className="fw-7 text-primary" style={{ fontSize: '16px' }}>
                                         {Helper.numFormat(kunjungan.examining)}
-                                    </span>
+                                    </div>
                                 </div>
 
                                 <div
@@ -1295,13 +1292,13 @@ export default function Dashboard() {
                                         background: 'var(--warning-light)',
                                     }}
                                 >
-                                    <span style={{ fontSize: '13px', fontWeight: 600 }}>
+                                    <div style={{display: 'flex', gap: '8px', fontSize: '13px', fontWeight: 600}}>
                                         <ClockCircleOutlined className="text-warning me-2" />
                                         Menunggu Antrean (WAITING)
-                                    </span>
-                                    <span className="fw-7 text-warning" style={{ fontSize: '16px' }}>
+                                    </div>
+                                    <div className="fw-7 text-warning" style={{ fontSize: '16px' }}>
                                         {Helper.numFormat(kunjungan.waiting)}
-                                    </span>
+                                    </div>
                                 </div>
 
                                 <div
@@ -1314,13 +1311,13 @@ export default function Dashboard() {
                                         background: 'var(--danger-light)',
                                     }}
                                 >
-                                    <span style={{ fontSize: '13px', fontWeight: 600 }}>
+                                    <div style={{display: 'flex', gap: '8px', fontSize: '13px', fontWeight: 600}}>
                                         <CloseCircleOutlined className="text-danger me-2" />
                                         Dibatalkan (CANCELLED)
-                                    </span>
-                                    <span className="fw-7 text-danger" style={{ fontSize: '16px' }}>
+                                    </div>
+                                    <div className="fw-7 text-danger" style={{ fontSize: '16px' }}>
                                         {Helper.numFormat(kunjungan.cancelled)}
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </Card>
@@ -1330,10 +1327,10 @@ export default function Dashboard() {
                         <Card
                             size="small"
                             title={
-                                <span>
-                                    <CreditCardOutlined className="text-primary me-2" />
-                                    Distribusi Status Pembayaran
-                                </span>
+                                <div style={{display: 'flex', gap: '8px'}}>
+                                    <CreditCardOutlined className="text-primary" />
+                                    <div>Distribusi Status Pembayaran</div>
+                                </div>
                             }
                             style={{ borderRadius: '16px', height: '100%' }}
                         >
@@ -1388,7 +1385,7 @@ export default function Dashboard() {
                                                     <span className={`fw-7 ${textClass}`}>
                                                         {label}
                                                     </span>
-                                                    <Tag color={isPaid ? 'green' : isPartial ? 'gold' : 'red'}>
+                                                    <Tag color={isPaid ? 'green' : isPartial ? 'gold' : 'red'} style={{borderRadius: '12px'}}>
                                                         {dist.count} Tagihan
                                                     </Tag>
                                                 </div>
@@ -1455,7 +1452,7 @@ export default function Dashboard() {
                             alignItems: 'center',
                             flexWrap: 'wrap',
                             gap: '10px',
-                            padding: '4px 0',
+                            padding: '12px 0',
                         }}
                     >
                         <span>
@@ -1463,62 +1460,60 @@ export default function Dashboard() {
                             <strong>{startDate}</strong> s/d <strong>{endDate}</strong>)
                         </span>
 
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                             {(activeDrillTab === 'visits' || activeDrillTab === 'actions') && (
-                                <select
-                                    aria-label="Filter Dokter Drilldown"
-                                    className="form-control"
-                                    style={{ width: '180px', height: '34px', padding: '0 12px' }}
-                                    value={drillDoctorId}
-                                    onChange={(e) => {
-                                        setDrillDoctorId(e.target.value);
-                                        setDrillPage(1);
-                                    }}
-                                >
-                                    <option value="">Semua Dokter</option>
-                                    {doctorsOptions.map((d) => (
-                                        <option key={d.value} value={d.value}>
-                                            {d.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                <div className="form-group-0" style={{ width: '210px' }}>
+                                    <Input.Select
+                                        title="Filter Dokter Drilldown"
+                                        name="filterDokterDrilldown"
+                                        type="filter"
+                                        options={[
+                                            { value: '', label: 'Semua Dokter' },
+                                            ...doctorsOptions,
+                                        ]}
+                                        val={drillDoctorId !== '' ? Number(drillDoctorId) : ''}
+                                        placeholder="Semua Dokter"
+                                        setValue={(_, val) => {
+                                            setDrillDoctorId(val ? String(val) : '');
+                                            setDrillPage(1);
+                                        }}
+                                    />
+                                </div>
                             )}
 
                             {activeDrillTab === 'payments' && (
-                                <select
-                                    aria-label="Filter Status Pembayaran Drilldown"
-                                    className="form-control"
-                                    style={{ width: '175px', height: '34px', padding: '0 12px' }}
-                                    value={drillPaymentStatus}
-                                    onChange={(e) => {
-                                        setDrillPaymentStatus(e.target.value);
-                                        setDrillPage(1);
-                                    }}
-                                >
-                                    <option value="">Semua Status Bayar</option>
-                                    <option value="lunas">Lunas (PAID)</option>
-                                    <option value="dibayar_sebagian">
-                                        Dibayar Sebagian (PARTIAL)
-                                    </option>
-                                    <option value="belum_dibayar">Belum Dibayar (UNPAID)</option>
-                                </select>
+                                <div className="form-group-0" style={{ width: '215px' }}>
+                                    <Input.Select
+                                        title="Filter Status Pembayaran Drilldown"
+                                        name="filterStatusPembayaranDrilldown"
+                                        type="filter"
+                                        options={[
+                                            { value: '', label: 'Semua Status Bayar' },
+                                            { value: 'lunas', label: 'Lunas (PAID)' },
+                                            {
+                                                value: 'dibayar_sebagian',
+                                                label: 'Dibayar Sebagian (PARTIAL)',
+                                            },
+                                            {
+                                                value: 'belum_dibayar',
+                                                label: 'Belum Dibayar (UNPAID)',
+                                            },
+                                        ]}
+                                        val={drillPaymentStatus}
+                                        placeholder="Semua Status Bayar"
+                                        setValue={(_, val) => {
+                                            setDrillPaymentStatus(val ? String(val) : '');
+                                            setDrillPage(1);
+                                        }}
+                                    />
+                                </div>
                             )}
 
-                            <div style={{ position: 'relative' }}>
-                                <SearchOutlined
-                                    className="icon-search text-muted"
-                                    style={{ top: '9px' }}
-                                />
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    style={{
-                                        paddingLeft: '34px',
-                                        height: '34px',
-                                        width: '220px',
-                                        borderRadius: '14px',
-                                    }}
-                                    placeholder="Cari di rincian tabel..."
+                            <div className="form-group-0" style={{ width: '220px' }}>
+                                <Input.Text
+                                    title="Cari di rincian tabel..."
+                                    name="drillSearch"
+                                    type="filter"
                                     value={drillSearch}
                                     onChange={handleSearchInputChange}
                                 />

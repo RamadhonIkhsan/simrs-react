@@ -1,7 +1,7 @@
 
 
-.lv3,
-.lv3 * {
+.login,
+.login * {
   font-family: var(--font-poppins), 'Poppins', sans-serif;
   box-sizing: border-box;
 }
@@ -19,7 +19,7 @@
 }
 
 /* =================== ROOT =================== */
-.lv3 {
+.login {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -84,7 +84,7 @@
     &-text {
       font-size: 26px;
       font-weight: 700;
-      color: #0a3d6b;
+      color: #008FD7;
       letter-spacing: -0.5px;
       margin-left: 2px;
     }
@@ -105,7 +105,7 @@
     &-title {
       font-size: 52px;
       font-weight: 400;
-      color: #0a3d6b;
+      color: #008FD7;
       margin: 0;
       line-height: 1;
       letter-spacing: -1px;
@@ -179,7 +179,7 @@
   &-welcome {
     font-size: 30px;
     font-weight: 400;
-    color: #0a3d6b;
+    color: #008FD7;
     margin: 0 0 8px 0;
     letter-spacing: -0.3px;
 
@@ -304,7 +304,7 @@
   &-submit {
     width: 100%;
     padding: 14px 24px;
-    background: #1a5ca8;
+    background: #008FD7;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -366,7 +366,7 @@
     &-name {
       font-size: 15px;
       font-weight: 700;
-      color: #0a3d6b;
+      color: #008FD7;
       line-height: 1.2;
     }
 
@@ -426,7 +426,7 @@
 
 /* =================== RESPONSIVE =================== */
 @media (max-width: 1024px) {
-  .lv3-left {
+  .login-left {
     width: 42%;
     min-width: 340px;
 
@@ -435,23 +435,23 @@
     }
   }
 
-  .lv3-brand-title {
+  .login-brand-title {
     font-size: 40px;
   }
-  .lv3-values {
+  .login-values {
     left: 36px;
   }
 }
 
 @media (max-height: 700px) {
-  .lv3-right {
+  .login-right {
     overflow-y: auto;
     align-items: flex-start;
   }
 }
 
 @media (max-width: 768px) {
-  .lv3 {
+  .login {
     flex-direction: column;
     overflow-y: auto;
 
@@ -470,7 +470,7 @@
 /* ==========================================================================
    Forgot Password Modal
    ========================================================================== */
-.lv3-forgot-modal {
+.login-forgot-modal {
   .ant-modal-content {
     padding: 0;
     border-radius: 20px;
@@ -486,7 +486,7 @@
   }
 }
 
-.lv3-fmodal {
+.login-fmodal {
   &-card {
     position: relative;
     padding: 28px 24px 20px;
@@ -552,7 +552,7 @@
 
   &-icon {
     font-size: 26px;
-    color: #0a3d6b;
+    color: #008FD7;
   }
 
   &-icon-sub {
@@ -574,7 +574,7 @@
   &-title {
     font-size: 19px;
     font-weight: 600;
-    color: #0a3d6b;
+    color: #008FD7;
     margin: 0 0 6px 0;
     letter-spacing: -0.3px;
   }
@@ -587,7 +587,7 @@
     max-width: 380px;
 
     strong {
-      color: #0a3d6b;
+      color: #008FD7;
       font-weight: 600;
     }
   }
@@ -613,7 +613,7 @@
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #0a3d6b;
+      background: #008FD7;
       color: #ffffff;
       font-size: 11px;
       font-weight: 600;
@@ -757,7 +757,7 @@
 
   &-btn-link {
     border: none;
-    background: #0a3d6b;
+    background: #008FD7;
     color: #ffffff;
     border-radius: 8px;
     padding: 6px 14px;

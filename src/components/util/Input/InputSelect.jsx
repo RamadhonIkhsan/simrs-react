@@ -13,6 +13,7 @@ const InputSelect = ({
     setReadonly,
     setDisabled,
     setMultiple,
+    type,
     val,
     loading,
     withSearch = true,
@@ -35,7 +36,10 @@ const InputSelect = ({
     return (
         <>
             <div className={`form-group mb-10 ${error?.[name]?.message ? 'error' : ''}`}>
-                <div className="floating-label-content">
+                <div
+                    className="floating-label-content"
+                    style={type === 'filter' ? { marginBottom: 0 } : undefined}
+                >
                     <Select
                         disabled={setReadonly || setDisabled}
                         loading={loading}

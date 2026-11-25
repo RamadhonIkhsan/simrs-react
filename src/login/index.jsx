@@ -67,38 +67,38 @@ const Login = () => {
 
     return (
         <>
-            <div className="lv3">
+            <div className="login">
                 {/* ======================== LEFT PANEL ======================== */}
-                <div className="lv3-left">
-                    <div className="lv3-left-bg">
+                <div className="login-left">
+                    <div className="login-left-bg">
                         <img
                             src="/img/hospital-building.jpg"
                             alt="Hospital Building"
-                            className="lv3-left-bg-img"
+                            className="login-left-bg-img"
                         />
-                        <div className="lv3-left-bg-overlay" />
+                        <div className="login-left-bg-overlay" />
                     </div>
 
-                    <div className="lv3-left-content">
+                    <div className="login-left-content">
                         {/* Logo */}
-                        <div className="lv3-logo">
+                        <div className="login-logo">
                             <img
                                 src="/img/logo-harkel.png"
                                 alt="Logo SIMRS"
-                                className="lv3-logo-img"
+                                className="login-logo-img"
                             />
                         </div>
 
                         {/* Branding */}
-                        <div className="lv3-brand">
-                            <div className="lv3-brand-accent" />
-                            <h1 className="lv3-brand-title">
+                        <div className="login-brand">
+                            <div className="login-brand-accent" />
+                            <h1 className="login-brand-title">
                                 SIMRS
                             </h1>
-                            <p className="lv3-brand-subtitle">
+                            <p className="login-brand-subtitle">
                                 Sistem Informasi Manajemen Rumah Sakit
                             </p>
-                            <p className="lv3-brand-desc">
+                            <p className="login-brand-desc">
                                 Pelayanan kesehatan terpadu,
                                 <br />
                                 cepat, akurat, dan terintegrasi
@@ -108,62 +108,52 @@ const Login = () => {
                         </div>
                     </div>
 
-                    {/* Values */}
-                    <div className="lv3-values">
-                        <span>Integritas</span>
-                        <span className="lv3-values-sep">|</span>
-                        <span>Profesionalisme</span>
-                        <span className="lv3-values-sep">|</span>
-                        <span>Inovasi</span>
-                    </div>
-
-                    {/* Decorative accents — static SVG */}
                     <img
                         src="/img/accent-tr.svg"
                         alt=""
                         aria-hidden="true"
-                        className="lv3-accent-tr"
+                        className="login-accent-tr"
                         draggable={false}
                     />
                 </div>
 
                 {/* ======================== RIGHT PANEL ======================== */}
-                <div className="lv3-right">
+                <div className="login-right">
                     {/* Decorative accents — static SVG */}
                     <img
                         src="/img/accent-bl.svg"
                         alt=""
                         aria-hidden="true"
-                        className="lv3-accent-bl"
+                        className="login-accent-bl"
                         draggable={false}
                     />
                     <img
                         src="/img/accent-tr2.svg"
                         alt=""
                         aria-hidden="true"
-                        className="lv3-accent-tr2"
+                        className="login-accent-tr2"
                         draggable={false}
                     />
 
-                    <div className="lv3-right-inner">
+                    <div className="login-right-inner">
                         {/* Header */}
-                        <div className="lv3-header">
-                            <h2 className="lv3-welcome">Selamat Datang</h2>
-                            <p className="lv3-welcome-sub">
+                        <div className="login-header">
+                            <h2 className="login-welcome">Selamat Datang</h2>
+                            <p className="login-welcome-sub">
                                 Silakan masuk ke akun SIMRS Anda.
                             </p>
                         </div>
 
                         {/* Form */}
-                        <form onSubmit={storeData} className="lv3-form" noValidate>
+                        <form onSubmit={storeData} className="login-form" noValidate>
                             {/* Username */}
-                            <div className="lv3-field">
+                            <div className="login-field">
                                 <label htmlFor="username-input" className="sr-only">
                                     Username atau Email
                                 </label>
-                                <div className="lv3-input-box">
+                                <div className="login-input-box">
                                     <UserOutlined
-                                        className="lv3-input-ico"
+                                        className="login-input-ico"
                                         aria-hidden="true"
                                     />
                                     <input
@@ -173,26 +163,26 @@ const Login = () => {
                                             required: 'Username harus diisi',
                                         })}
                                         placeholder="Username atau Email"
-                                        className="lv3-input"
+                                        className="login-input"
                                         autoComplete="username"
                                         aria-label="Username atau Email"
                                     />
                                 </div>
                                 {errors.username && (
-                                    <div className="lv3-field-err" role="alert">
+                                    <div className="login-field-err" role="alert">
                                         {errors.username.message}
                                     </div>
                                 )}
                             </div>
 
                             {/* Password */}
-                            <div className="lv3-field">
+                            <div className="login-field">
                                 <label htmlFor="password-input" className="sr-only">
                                     Password
                                 </label>
-                                <div className="lv3-input-box">
+                                <div className="login-input-box">
                                     <LockOutlined
-                                        className="lv3-input-ico"
+                                        className="login-input-ico"
                                         aria-hidden="true"
                                     />
                                     <input
@@ -202,13 +192,13 @@ const Login = () => {
                                             required: 'Password harus diisi',
                                         })}
                                         placeholder="Password"
-                                        className="lv3-input"
+                                        className="login-input"
                                         autoComplete="current-password"
                                         aria-label="Password"
                                     />
                                     <button
                                         type="button"
-                                        className="lv3-eye"
+                                        className="login-eye"
                                         onClick={() => setShowPassword(!showPassword)}
                                         aria-label={
                                             showPassword
@@ -224,17 +214,17 @@ const Login = () => {
                                     </button>
                                 </div>
                                 {errors.password && (
-                                    <div className="lv3-field-err" role="alert">
+                                    <div className="login-field-err" role="alert">
                                         {errors.password.message}
                                     </div>
                                 )}
                             </div>
 
                             {/* Options */}
-                            {/* <div className="lv3-options">
+                            {/* <div className="login-options">
                                 <button
                                     type="button"
-                                    className="lv3-forgot"
+                                    className="login-forgot"
                                     onClick={() => setForgotModalOpen(true)}
                                 >
                                     Lupa password?
@@ -242,10 +232,10 @@ const Login = () => {
                             </div> */}
 
                             {/* Submit */}
-                            <div className="lv3-submit-wrap">
+                            <div className="login-submit-wrap">
                                 <button
                                     type="submit"
-                                    className="lv3-submit"
+                                    className="login-submit"
                                     disabled={loadingLogin}
                                     aria-busy={loadingLogin}
                                 >
@@ -271,26 +261,26 @@ const Login = () => {
 
                             {/* Error */}
                             {errorLogin && (
-                                <div className="lv3-error-msg" role="alert">
+                                <div className="login-error-msg" role="alert">
                                     {errorLogin}
                                 </div>
                             )}
                         </form>
 
                         {/* Footer */}
-                        {/* <div className="lv3-footer">
-                            <div className="lv3-footer-brand">
+                        {/* <div className="login-footer">
+                            <div className="login-footer-brand">
                                 <SafetyCertificateOutlined
-                                    className="lv3-footer-ico"
+                                    className="login-footer-ico"
                                     aria-hidden="true"
                                 />
                                 <div>
-                                    <div className="lv3-footer-name">SIMRS</div>
-                                    <div className="lv3-footer-sub">Healthcare System</div>
+                                    <div className="login-footer-name">SIMRS</div>
+                                    <div className="login-footer-sub">Healthcare System</div>
                                 </div>
                             </div>
-                            <div className="lv3-footer-sep" />
-                            <div className="lv3-footer-tag">
+                            <div className="login-footer-sep" />
+                            <div className="login-footer-tag">
                                 Tata kelola layanan medis yang baik,
                                 <br />
                                 rekam medis yang terintegrasi,
